@@ -370,6 +370,10 @@ sudo brew install git # <- DO NOT DO THIS
 I'm going to wing this if we have time.
 
 * <2016-02-28 Sun> -- OMGWTFDVCS (Git, et al)
+#+BEGIN_SRC sh :exports none :results silent
+rm -rf /tmp/demo*
+#+END_SRC
+
 ** Version Control: What's the point?
 
 [[http://www.phdcomics.com/comics/archive_print.php?comicid=1531]]
@@ -1214,7 +1218,7 @@ it'll really "work" yet, y'know? But for now, today, right now: let's assume
 sharing is on the menu. "But wait," you say, "I haven't set up a place to share
 this!" Git agrees:
 
-#+BEGIN_SRC sh :eval never
+#+BEGIN_SRC sh
 git push
 #+END_SRC
 
@@ -1341,7 +1345,7 @@ cd /tmp && git clone ./demo-remote demo-second-clone
 In demo-second-clone, I can use the ~-av~ syntax (all, verbose) to see what
 branches are on the remote:
 
-#+BEGIN_SRC sh :dir /tmp/demo-second-clone
+#+BEGIN_SRC sh :dir /tmp/demo-second-clone :exports both
 git branch -av
 #+END_SRC
 
@@ -1364,7 +1368,7 @@ git push --set-upstream origin master
 : Branch master set up to track remote branch master from origin.
 
 Now, back in demo-second-clone:
-#+BEGIN_SRC sh :dir /tmp/demo-second-clone
+#+BEGIN_SRC sh :dir /tmp/demo-second-clone :exports both
 git branch -avv
 #+END_SRC
 
@@ -1377,7 +1381,7 @@ git branch -avv
 
 There. Now, let's see what ~git status~ in demo-second-clone has to say:
 
-#+BEGIN_SRC sh :dir /tmp/demo-second-clone
+#+BEGIN_SRC sh :dir /tmp/demo-second-clone :exports both
 git status
 #+END_SRC
 
@@ -1390,7 +1394,7 @@ It says we're up-to-date with ~origin/even_list_devier~ -- but we know that's no
 true, because we pushed a commit from ~demo-repo~. We can ask the remote to tell
 us about commits we're missing using ~git fetch~:
 
-#+BEGIN_SRC sh :dir /tmp/demo-second-clone
+#+BEGIN_SRC sh :dir /tmp/demo-second-clone :exports both
 git fetch
 git status
 #+END_SRC
@@ -1405,7 +1409,7 @@ Ah! There we go. We are "behind" by 1 commit, as expected. The thing to notice
 is that ~git fetch~ /has not changed anything/. We know what we're missing, but the
 current state of our files is no different:
 
-#+BEGIN_SRC sh :dir /tmp/demo-second-clone
+#+BEGIN_SRC sh :dir /tmp/demo-second-clone :exports both
 cat list.txt
 #+END_SRC
 
@@ -1420,7 +1424,7 @@ cat list.txt
 ~git pull~ is the command that will actually bring changes from the remote /in to
 our working copy/:
 
-#+BEGIN_SRC sh :dir /tmp/demo-second-clone
+#+BEGIN_SRC sh :dir /tmp/demo-second-clone :exports both
 git pull
 #+END_SRC
 
@@ -1430,7 +1434,7 @@ git pull
 :  list.txt | 1 +
 :  1 file changed, 1 insertion(+)
 
-#+BEGIN_SRC sh :dir /tmp/demo-second-clone
+#+BEGIN_SRC sh :dir /tmp/demo-second-clone :exports both
 cat list.txt
 #+END_SRC
 
@@ -1446,6 +1450,7 @@ cat list.txt
 Voila.
 
 ** Merge Conflicts
+If we have time.
 
 * <2016-03-06 Sun> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
 ** What on Earth Even Is This
