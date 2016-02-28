@@ -372,6 +372,7 @@ I'm going to wing this if we have time.
 * <2016-02-28 Sun> -- OMGWTFDVCS (Git, et al)
 #+BEGIN_SRC sh :exports none :results silent
 rm -rf /tmp/demo*
+rm -rf /tmp/*-demo
 #+END_SRC
 
 ** Version Control: What's the point?
@@ -634,7 +635,7 @@ git status
 
 #+RESULTS:
 : Initialized empty Git repository in /private/tmp/branch-demo/.git/
-: [master (root-commit) f50e4db] Add pears to list
+: [master (root-commit) 17eb8a8] Add pears to list
 :  1 file changed, 1 insertion(+)
 :  create mode 100644 groceries.txt
 : On branch master
@@ -643,7 +644,7 @@ git status
 "On branch master; nothing to commit, working directory clean." ~groceries.txt~
 looks like this:
 #+NAME: groc_contents
-#+BEGIN_SRC sh :dir /tmp/branch-demo
+#+BEGIN_SRC sh :dir /tmp/branch-demo :exports both
 cat groceries.txt
 #+END_SRC
 
@@ -651,7 +652,8 @@ cat groceries.txt
 : 1. Pears
 
 But now:
-#+BEGIN_SRC sh :dir /tmp/branch-demo
+
+#+BEGIN_SRC sh :dir /tmp/branch-demo :exports both
 git checkout -b new_branch
 echo "2. tofu" >> groceries.txt
 git commit -am "Add tofu to list"
@@ -659,19 +661,23 @@ git status
 #+END_SRC
 
 #+RESULTS:
-: [new_branch 18756dc] Add tofu to list
+: [new_branch 9829f34] Add tofu to list
 :  1 file changed, 1 insertion(+)
 : On branch new_branch
 : nothing to commit, working directory clean
 
 ~groceries.txt~ looks like this now:
-#+CALL: groc_contents()
+
+#+BEGIN_SRC sh :dir /tmp/branch-demo :exports both
+cat groceries.txt
+#+END_SRC
 
 #+RESULTS:
 : 1. Pears
 : 2. tofu
 
 But now:
+
 #+BEGIN_SRC sh :dir /tmp/branch-demo
 git checkout master
 cat groceries.txt
@@ -694,6 +700,7 @@ cat groceries.txt
 : 2. tofu
 
 We can combine the two histories through /merging/:
+
 #+BEGIN_SRC sh :dir /tmp/branch-demo
 git checkout master   # We check out the branch we want changes to come *in* to
 git merge new_branch  # "Bring the changes from new_branch" in to master
@@ -702,7 +709,7 @@ cat groceries.txt
 #+END_SRC
 
 #+RESULTS:
-: Updating f50e4db..18756dc
+: Updating 17eb8a8..9829f34
 : Fast-forward
 :  groceries.txt | 1 +
 :  1 file changed, 1 insertion(+)
