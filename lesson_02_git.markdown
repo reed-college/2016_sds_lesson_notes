@@ -42,15 +42,16 @@ ls -la
 ```
 
 ``` example
-total 160
-drwxr-xr-x   8 rossdonaldson  staff    272 Feb 27 16:28 .
-lrwxr-xr-x   1 rossdonaldson  staff     39 Feb 27 16:28 .#master_file.org -> rossdonaldson@RossDonaldson.local.34091
+total 312
+drwxr-xr-x   9 rossdonaldson  staff    306 Feb 28 14:58 .
 drwxr-xr-x   7 rossdonaldson  staff    238 Feb 21 12:49 ..
-drwxr-xr-x  15 rossdonaldson  staff    510 Feb 27 16:13 .git
--rw-r--r--   1 rossdonaldson  staff      7 Feb 23 20:11 .gitignore
+drwxr-xr-x  15 rossdonaldson  staff    510 Feb 28 14:58 .git
+-rw-r--r--   1 rossdonaldson  staff     25 Feb 28 14:58 .gitignore
 -rw-r--r--   1 rossdonaldson  staff    154 Feb 21 12:49 README.markdown
 -rw-r--r--   1 rossdonaldson  staff  16693 Feb 21 12:49 lesson_01_development_environment.markdown
--rw-r--r--   1 rossdonaldson  staff  45348 Feb 27 16:27 master_file.org
+-rw-r--r--   1 rossdonaldson  staff  31979 Feb 28 12:52 lesson_02_git.markdown
+-rw-r--r--   1 rossdonaldson  staff  48764 Feb 28 12:52 master_file.html
+-rw-r--r--   1 rossdonaldson  staff  45374 Feb 28 14:08 master_file.org
 ```
 
 (Note that git's folder is named with the leading-dot hidden folder syntax, so you have to use the `la` flags to `ls` in order to see it.)
@@ -194,7 +195,7 @@ git status
 
 ``` example
 Reinitialized existing Git repository in /private/tmp/branch-demo/.git/
-[master 124a1f6] Add pears to list
+[master 9f20b09] Add pears to list
  1 file changed, 2 deletions(-)
 On branch master
 nothing to commit, working directory clean
@@ -220,7 +221,7 @@ git status
 ```
 
 ``` example
-[master 4e9284d] Add tofu to list
+[master 7b5a55c] Add tofu to list
  1 file changed, 1 insertion(+)
 On branch master
 nothing to commit, working directory clean
@@ -228,10 +229,13 @@ nothing to commit, working directory clean
 
 `groceries.txt` looks like this now:
 
+``` src
+cat groceries.txt
+```
+
 ``` example
-"1. Pears
+1. Pears
 2. tofu
-"
 ```
 
 But now:
@@ -292,8 +296,7 @@ git status
 
 ``` example
 On branch master
-Your branch is ahead of 'origin/master' by 9 commits.
-  (use "git push" to publish your local commits)
+Your branch is up-to-date with 'origin/master'.
 nothing to commit, working directory clean
 ```
 
@@ -315,8 +318,6 @@ cat groceries.txt
 1. Pears
 2. tofu
 3. Gargantua
-4. Pantagruel
-4. Pantagruel
 ```
 
 The important thing about cloning is that it can create an exact copy of *any git repo*, whether it's on your local file system or exposed via a transport protocol like HTTPS or SSH. This leads us directly in to the notion of "remotes".
@@ -336,7 +337,7 @@ git commit -am "Add Gargantua to groceries.txt"
 ```
 
 ``` example
-[master 2dded7e] Add Gargantua to groceries.txt
+[master cc2d74c] Add Gargantua to groceries.txt
  1 file changed, 1 insertion(+)
 ```
 
@@ -349,8 +350,6 @@ cat groceries.txt
 1. Pears
 2. tofu
 3. Gargantua
-4. Pantagruel
-4. Pantagruel
 ```
 
 ``` src
@@ -359,13 +358,11 @@ cat groceries.txt
 ```
 
 ``` example
-Already up-to-date!
-Merge made by the 'recursive' strategy.
+Updating 786b5d9..cc2d74c
+Fast-forward
 1. Pears
 2. tofu
 3. Gargantua
-4. Pantagruel
-4. Pantagruel
 ```
 
 By using `git pull`, our checkout now has the changes we made in our remote.
@@ -413,18 +410,8 @@ cat list.txt
 2. Cheese
 3. Bacon
 4. kale
-1. Eggs
-2. Cheese
-3. Bacon
-4. kale
-1. Eggs
-2. Cheese
-3. Bacon
-4. kale
-1. Eggs
-2. Cheese
-3. Bacon
-4. kale
+5. organge juice
+6. potato
 1. Eggs
 2. Cheese
 3. Bacon
@@ -452,10 +439,11 @@ ls -la
 
 ``` example
 total 8
-drwxr-xr-x   4 rossdonaldson  wheel  136 Feb 27 16:28 .
-drwxrwxrwt  20 root           wheel  680 Feb 27 16:24 ..
-drwxr-xr-x  12 rossdonaldson  wheel  408 Feb 27 16:28 .git
--rw-r--r--   1 rossdonaldson  wheel  167 Feb 27 16:28 list.txt
+drwxr-xr-x   5 rossdonaldson  wheel  170 Feb 28 14:09 .
+drwxrwxrwt  19 root           wheel  646 Feb 28 14:53 ..
+drwxr-xr-x  12 rossdonaldson  wheel  408 Feb 28 14:58 .git
+-rw-r--r--   1 rossdonaldson  wheel   89 Feb 28 14:58 list.txt
+drwxr-xr-x   5 rossdonaldson  wheel  170 Feb 28 14:09 so_important
 ```
 
 Now there's a `.git`. Blam.
@@ -469,8 +457,8 @@ git status
 ```
 
 ``` example
-On branch master
-Your branch is up-to-date with 'origin/master'.
+On branch even_list_devier
+Your branch is up-to-date with 'origin/even_list_devier'.
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
@@ -493,8 +481,8 @@ git status
 ```
 
 ``` example
-On branch master
-Your branch is up-to-date with 'origin/master'.
+On branch even_list_devier
+Your branch is up-to-date with 'origin/even_list_devier'.
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
@@ -512,8 +500,8 @@ git status
 ```
 
 ``` example
-On branch master
-Your branch is up-to-date with 'origin/master'.
+On branch even_list_devier
+Your branch is up-to-date with 'origin/even_list_devier'.
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
@@ -530,8 +518,8 @@ git status
 ```
 
 ``` example
-On branch master
-Your branch is up-to-date with 'origin/master'.
+On branch even_list_devier
+Your branch is up-to-date with 'origin/even_list_devier'.
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
@@ -552,8 +540,8 @@ git status
 ```
 
 ``` example
-On branch master
-Your branch is up-to-date with 'origin/master'.
+On branch even_list_devier
+Your branch is up-to-date with 'origin/even_list_devier'.
 Changes to be committed:
   (use "git reset HEAD <file>..." to unstage)
 
@@ -569,7 +557,7 @@ git commit -m "Initial commit of a grocery list"
 ```
 
 ``` example
-[master 28776a0] Initial commit of a grocery list
+[even_list_devier 3535ef6] Initial commit of a grocery list
  1 file changed, 4 insertions(+)
 ```
 
@@ -588,8 +576,8 @@ git status
 ```
 
 ``` example
-On branch master
-Your branch is ahead of 'origin/master' by 1 commit.
+On branch even_list_devier
+Your branch is ahead of 'origin/even_list_devier' by 1 commit.
   (use "git push" to publish your local commits)
 nothing to commit, working directory clean
 ```
@@ -605,9 +593,9 @@ git branch
 ```
 
 ``` example
-  even_list_devier
+* even_list_devier
   list_dev
-* master
+  master
 ```
 
 Okay, only the one so far. The asterisk indicates that `master` is our current branch. We can make a new branch like so:
@@ -618,9 +606,9 @@ git branch
 ```
 
 ``` example
-  even_list_devier
+* even_list_devier
   list_dev
-* master
+  master
 ```
 
 We've created a new branch… but we're still on master. To actually *use* our new branch, we need the next git command: `checkout`.
@@ -635,9 +623,7 @@ git status
 ```
 
 ``` example
-Your branch is up-to-date with 'origin/list_dev'.
 On branch list_dev
-Your branch is up-to-date with 'origin/list_dev'.
 nothing to commit, working directory clean
 ```
 
@@ -667,7 +653,6 @@ git status
 
 ``` example
 On branch list_dev
-Your branch is up-to-date with 'origin/list_dev'.
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
@@ -704,8 +689,11 @@ git commit -am "This is so important. Add it!"
 ```
 
 ``` example
-[list_dev 6f4a7f3] This is so important. Add it!
- 1 file changed, 1 insertion(+)
+[list_dev b62ebd6] This is so important. Add it!
+ 4 files changed, 1 insertion(+)
+ create mode 100644 so_important/critical_1
+ create mode 100644 so_important/critical_2
+ create mode 100644 so_important/critical_3
 ```
 
 And now, let's fat-finger a poorly considered delete:
@@ -720,10 +708,10 @@ ls -la
 
 ``` example
 total 8
-drwxr-xr-x   4 rossdonaldson  wheel  136 Feb 27 16:28 .
-drwxrwxrwt  20 root           wheel  680 Feb 27 16:24 ..
-drwxr-xr-x  12 rossdonaldson  wheel  408 Feb 27 16:28 .git
--rw-r--r--   1 rossdonaldson  wheel  141 Feb 27 16:28 list.txt
+drwxr-xr-x   4 rossdonaldson  wheel  136 Feb 28 14:58 .
+drwxrwxrwt  19 root           wheel  646 Feb 28 14:53 ..
+drwxr-xr-x  12 rossdonaldson  wheel  408 Feb 28 14:58 .git
+-rw-r--r--   1 rossdonaldson  wheel   51 Feb 28 14:58 list.txt
 ```
 
 Well crap. All our important stuff is completely gone. *Except*, we were smart developers and added it to git! Git knows something is up:
@@ -734,8 +722,6 @@ git status
 
 ``` example
 On branch list_dev
-Your branch is ahead of 'origin/list_dev' by 1 commit.
-  (use "git push" to publish your local commits)
 Changes not staged for commit:
   (use "git add/rm <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
@@ -852,9 +838,9 @@ git branch -vv
 ```
 
 ``` example
-  even_list_devier fab2dd6 [origin/even_list_devier] Adding 5 Gold Rings to grocery list
-* list_dev         6f4a7f3 [origin/list_dev] This is so important. Add it!
-  master           28776a0 [origin/master: ahead 1] Initial commit of a grocery list
+  even_list_devier 3535ef6 [origin/even_list_devier] Initial commit of a grocery list
+* list_dev         b62ebd6 This is so important. Add it!
+  master           3a55f60 Adding list.txt to version control
 ```
 
 `[origin/even_list_devier]` means that `even_list_devier` is "tracking" an eponymous remote branch on `origin`. Yatta!
@@ -865,11 +851,6 @@ Now, we can make that command a little shorter. Remember in the <span id="orgtar
 echo "5. Gold Rings" >> list.txt
 git commit -am "Adding 5 Gold Rings to grocery list"
 git push
-```
-
-``` example
-[list_dev 2c916e9] Adding 5 Gold Rings to grocery list
- 1 file changed, 1 insertion(+)
 ```
 
 Lovely.
@@ -889,11 +870,11 @@ git branch -av
 ```
 
 ``` example
-* even_list_devier                fab2dd6 Adding 5 Gold Rings to grocery list
+* even_list_devier                9280142 Adding 5 Gold Rings to grocery list
   remotes/origin/HEAD             -> origin/even_list_devier
-  remotes/origin/even_list_devier fab2dd6 Adding 5 Gold Rings to grocery list
-  remotes/origin/list_dev         6b174c5 Adding 5 Gold Rings to grocery list
-  remotes/origin/master           839ecb5 Initial commit of a grocery list
+  remotes/origin/even_list_devier 9280142 Adding 5 Gold Rings to grocery list
+  remotes/origin/list_dev         3bf5739 Initial commit of a grocery list
+  remotes/origin/master           3bf5739 Initial commit of a grocery list
 ```
 
 Ah, of course. We never pushed `master` or `list_dev`, so they aren't on the remote at all. Let's fix that:
@@ -907,10 +888,7 @@ git push --set-upstream origin master
 ```
 
 ``` example
-Your branch is up-to-date with 'origin/list_dev'.
 Branch list_dev set up to track remote branch list_dev from origin.
-Your branch is ahead of 'origin/master' by 1 commit.
-  (use "git push" to publish your local commits)
 Branch master set up to track remote branch master from origin.
 ```
 
@@ -921,11 +899,11 @@ git branch -avv
 ```
 
 ``` example
-* even_list_devier                fab2dd6 [origin/even_list_devier] Adding 5 Gold Rings to grocery list
+* even_list_devier                9280142 [origin/even_list_devier] Adding 5 Gold Rings to grocery list
   remotes/origin/HEAD             -> origin/even_list_devier
-  remotes/origin/even_list_devier fab2dd6 Adding 5 Gold Rings to grocery list
-  remotes/origin/list_dev         6b174c5 Adding 5 Gold Rings to grocery list
-  remotes/origin/master           839ecb5 Initial commit of a grocery list
+  remotes/origin/even_list_devier 9280142 Adding 5 Gold Rings to grocery list
+  remotes/origin/list_dev         3bf5739 Initial commit of a grocery list
+  remotes/origin/master           3bf5739 Initial commit of a grocery list
 ```
 
 There. Now, let's see what `git status` in demo-second-clone has to say:
@@ -949,7 +927,9 @@ git status
 
 ``` example
 On branch even_list_devier
-Your branch is up-to-date with 'origin/even_list_devier'.
+Your branch and 'origin/even_list_devier' have diverged,
+and have 3 and 4 different commits each, respectively.
+  (use "git pull" to merge the remote branch into yours)
 nothing to commit, working directory clean
 ```
 
@@ -974,10 +954,6 @@ cat list.txt
 git pull
 ```
 
-``` example
-Already up-to-date.
-```
-
 ``` src
 cat list.txt
 ```
@@ -987,8 +963,17 @@ cat list.txt
 2. Cheese
 3. Bacon
 4. kale
+<<<<<<< HEAD
 4. Orange Juice
 5. Gold Rings
+=======
+5. organge juice
+6. potato
+1. Eggs
+2. Cheese
+3. Bacon
+4. kale
+>>>>>>> 3535ef6afbefff807377d387e5cdc92d3ef29797
 ```
 
 Voila.
@@ -1000,7 +985,8 @@ If we have time.
 
 Author: Ross Donaldson
 
-Created: 2016-02-27 Sat 16:28
+Created: 2016-02-28 Sun 14:58
 
+[Validate](http://validator.w3.org/check?uri=referer)
 
 
