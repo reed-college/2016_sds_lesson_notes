@@ -370,10 +370,15 @@ sudo brew install git # <- DO NOT DO THIS
 I'm going to wing this if we have time.
 
 * <2016-02-28 Sun> -- OMGWTFDVCS (Git, et al)
-#+BEGIN_SRC sh :exports none :results silent
+
+** Cleanup                                                        :noexport:
+#+BEGIN_SRC sh
 rm -rf /tmp/demo*
 rm -rf /tmp/*-demo
+touch /tmp/export-ran
 #+END_SRC
+
+#+RESULTS:
 
 ** Version Control: What's the point?
 
@@ -635,7 +640,7 @@ git status
 
 #+RESULTS:
 : Initialized empty Git repository in /private/tmp/branch-demo/.git/
-: [master (root-commit) 17eb8a8] Add pears to list
+: [master (root-commit) b98e21b] Add pears to list
 :  1 file changed, 1 insertion(+)
 :  create mode 100644 groceries.txt
 : On branch master
@@ -661,7 +666,7 @@ git status
 #+END_SRC
 
 #+RESULTS:
-: [new_branch 9829f34] Add tofu to list
+: [new_branch f6e351f] Add tofu to list
 :  1 file changed, 1 insertion(+)
 : On branch new_branch
 : nothing to commit, working directory clean
@@ -709,7 +714,7 @@ cat groceries.txt
 #+END_SRC
 
 #+RESULTS:
-: Updating 17eb8a8..9829f34
+: Updating b98e21b..f6e351f
 : Fast-forward
 :  groceries.txt | 1 +
 :  1 file changed, 1 insertion(+)
@@ -1160,13 +1165,10 @@ git commit -am "This is so important. Add it!"
 :  create mode 100644 so_important/critical_2
 :  create mode 100644 so_important/critical_3
 
-And now, let's fat-finger a poorly considered delete:
+And now, let's do a poorly considered delete:
 
 #+BEGIN_SRC sh
 rm -rf so_important
-#+END_SRC
-
-#+BEGIN_SRC sh
 ls -la
 #+END_SRC
 
@@ -1257,6 +1259,7 @@ considerably more sense if you think of cloning a repo from Github -- Github is
 then your "origin".)
 
 We can see that we have a remote set:
+
 #+BEGIN_SRC sh
 git remote
 #+END_SRC
@@ -1456,8 +1459,6 @@ cat list.txt
 
 Voila.
 
-** Merge Conflicts
-If we have time.
 
 * <2016-03-06 Sun> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
 ** What on Earth Even Is This
