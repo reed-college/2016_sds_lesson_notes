@@ -42,16 +42,16 @@ ls -la
 ```
 
 ``` example
-total 312
-drwxr-xr-x   9 rossdonaldson  staff    306 Feb 28 14:58 .
+total 488
+drwxr-xr-x  10 rossdonaldson  staff    340 Feb 28 17:18 .
 drwxr-xr-x   7 rossdonaldson  staff    238 Feb 21 12:49 ..
-drwxr-xr-x  15 rossdonaldson  staff    510 Feb 28 14:58 .git
+drwxr-xr-x  15 rossdonaldson  staff    510 Feb 28 17:18 .git
 -rw-r--r--   1 rossdonaldson  staff     25 Feb 28 14:58 .gitignore
 -rw-r--r--   1 rossdonaldson  staff    154 Feb 21 12:49 README.markdown
 -rw-r--r--   1 rossdonaldson  staff  16693 Feb 21 12:49 lesson_01_development_environment.markdown
--rw-r--r--   1 rossdonaldson  staff  31979 Feb 28 12:52 lesson_02_git.markdown
--rw-r--r--   1 rossdonaldson  staff  48764 Feb 28 12:52 master_file.html
--rw-r--r--   1 rossdonaldson  staff  45374 Feb 28 14:08 master_file.org
+-rw-r--r--   1 rossdonaldson  staff  55596 Feb 28 17:18 lesson_02_git.markdown
+-rw-r--r--   1 rossdonaldson  staff  78599 Feb 28 17:18 master_file.html
+-rw-r--r--   1 rossdonaldson  staff  45387 Feb 28 17:18 master_file.org
 ```
 
 (Note that git's folder is named with the leading-dot hidden folder syntax, so you have to use the `la` flags to `ls` in order to see it.)
@@ -91,7 +91,7 @@ git status
 ```
 
 ``` example
-Reinitialized existing Git repository in /private/tmp/demo/.git/
+Initialized empty Git repository in /private/tmp/demo/.git/
 On branch master
 
 Initial commit
@@ -99,8 +99,8 @@ Initial commit
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
-    .gitignore
     knowledge.txt
+    top_secret.txt
 
 nothing added to commit but untracked files present (use "git add" to track)
 ```
@@ -194,9 +194,10 @@ git status
 ```
 
 ``` example
-Reinitialized existing Git repository in /private/tmp/branch-demo/.git/
-[master 9f20b09] Add pears to list
- 1 file changed, 2 deletions(-)
+Initialized empty Git repository in /private/tmp/branch-demo/.git/
+[master (root-commit) b253537] Add pears to list
+ 1 file changed, 1 insertion(+)
+ create mode 100644 groceries.txt
 On branch master
 nothing to commit, working directory clean
 ```
@@ -221,9 +222,9 @@ git status
 ```
 
 ``` example
-[master 7b5a55c] Add tofu to list
+[new_branch 03df594] Add tofu to list
  1 file changed, 1 insertion(+)
-On branch master
+On branch new_branch
 nothing to commit, working directory clean
 ```
 
@@ -247,7 +248,6 @@ cat groceries.txt
 
 ``` example
 1. Pears
-2. tofu
 ```
 
 We checkout master… and we're back to the old version. Git has re-written `groceries.txt` to match the last commit on the master branch. If we go back to `new_branch`, our changes are intact:
@@ -272,7 +272,10 @@ cat groceries.txt
 ```
 
 ``` example
-Already up-to-date.
+Updating b253537..03df594
+Fast-forward
+ groceries.txt | 1 +
+ 1 file changed, 1 insertion(+)
 On branch master
 nothing to commit, working directory clean
 1. Pears
@@ -317,7 +320,6 @@ cat groceries.txt
 ``` example
 1. Pears
 2. tofu
-3. Gargantua
 ```
 
 The important thing about cloning is that it can create an exact copy of *any git repo*, whether it's on your local file system or exposed via a transport protocol like HTTPS or SSH. This leads us directly in to the notion of "remotes".
@@ -337,7 +339,7 @@ git commit -am "Add Gargantua to groceries.txt"
 ```
 
 ``` example
-[master cc2d74c] Add Gargantua to groceries.txt
+[master 371f92c] Add Gargantua to groceries.txt
  1 file changed, 1 insertion(+)
 ```
 
@@ -349,7 +351,6 @@ cat groceries.txt
 ``` example
 1. Pears
 2. tofu
-3. Gargantua
 ```
 
 ``` src
@@ -358,8 +359,10 @@ cat groceries.txt
 ```
 
 ``` example
-Updating 786b5d9..cc2d74c
+Updating 03df594..371f92c
 Fast-forward
+ groceries.txt | 1 +
+ 1 file changed, 1 insertion(+)
 1. Pears
 2. tofu
 3. Gargantua
@@ -409,12 +412,6 @@ cat list.txt
 1. Eggs
 2. Cheese
 3. Bacon
-4. kale
-5. organge juice
-6. potato
-1. Eggs
-2. Cheese
-3. Bacon
 ```
 
 Good so far.
@@ -428,7 +425,7 @@ git init
 ```
 
 ``` example
-Reinitialized existing Git repository in /private/tmp/demo-repo/.git/
+Initialized empty Git repository in /private/tmp/demo-repo/.git/
 ```
 
 Perfect! Repo achieved. Notice that the `init` command has done exactly what it tells us it did – if we check the contents of our working directory:
@@ -439,11 +436,10 @@ ls -la
 
 ``` example
 total 8
-drwxr-xr-x   5 rossdonaldson  wheel  170 Feb 28 14:09 .
-drwxrwxrwt  19 root           wheel  646 Feb 28 14:53 ..
-drwxr-xr-x  12 rossdonaldson  wheel  408 Feb 28 14:58 .git
--rw-r--r--   1 rossdonaldson  wheel   89 Feb 28 14:58 list.txt
-drwxr-xr-x   5 rossdonaldson  wheel  170 Feb 28 14:09 so_important
+drwxr-xr-x   4 rossdonaldson  wheel  136 Feb 28 17:19 .
+drwxrwxrwt  18 root           wheel  612 Feb 28 17:19 ..
+drwxr-xr-x   9 rossdonaldson  wheel  306 Feb 28 17:19 .git
+-rw-r--r--   1 rossdonaldson  wheel   27 Feb 28 17:19 list.txt
 ```
 
 Now there's a `.git`. Blam.
@@ -457,15 +453,16 @@ git status
 ```
 
 ``` example
-On branch even_list_devier
-Your branch is up-to-date with 'origin/even_list_devier'.
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+On branch master
 
-        modified:   list.txt
+Initial commit
 
-no changes added to commit (use "git add" and/or "git commit -a")
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+    list.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
 ```
 
 We learn which branch we're on (master), that the commit we're building will be the very first (i.e. the Initial commit), and that there's a single, un-tracked file. Not so exciting right now, but we'll be coming back to this command a **lot**.
@@ -481,15 +478,16 @@ git status
 ```
 
 ``` example
-On branch even_list_devier
-Your branch is up-to-date with 'origin/even_list_devier'.
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+On branch master
 
-        modified:   list.txt
+Initial commit
 
-no changes added to commit (use "git add" and/or "git commit -a")
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+    list.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
 ```
 
 And after:
@@ -500,12 +498,14 @@ git status
 ```
 
 ``` example
-On branch even_list_devier
-Your branch is up-to-date with 'origin/even_list_devier'.
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
+On branch master
 
-        modified:   list.txt
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+        new file:   list.txt
 ```
 
 Okay! More informative! We've got a command on unstaging (look further through this doc for more on that), and list.txt is now known as a "new file"! Progress.
@@ -518,12 +518,14 @@ git status
 ```
 
 ``` example
-On branch even_list_devier
-Your branch is up-to-date with 'origin/even_list_devier'.
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
+On branch master
 
-    modified:   list.txt
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+    new file:   list.txt
 
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
@@ -540,12 +542,14 @@ git status
 ```
 
 ``` example
-On branch even_list_devier
-Your branch is up-to-date with 'origin/even_list_devier'.
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
+On branch master
 
-        modified:   list.txt
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+        new file:   list.txt
 ```
 
 ### `git commit`
@@ -557,8 +561,9 @@ git commit -m "Initial commit of a grocery list"
 ```
 
 ``` example
-[even_list_devier 3535ef6] Initial commit of a grocery list
+[master (root-commit) 5298dd9] Initial commit of a grocery list
  1 file changed, 4 insertions(+)
+ create mode 100644 list.txt
 ```
 
 Let's break this down: `git commit` is our command – it's the most salient thing happening. That `-m` flag is worth unpacking.
@@ -576,9 +581,7 @@ git status
 ```
 
 ``` example
-On branch even_list_devier
-Your branch is ahead of 'origin/even_list_devier' by 1 commit.
-  (use "git push" to publish your local commits)
+On branch master
 nothing to commit, working directory clean
 ```
 
@@ -593,9 +596,7 @@ git branch
 ```
 
 ``` example
-* even_list_devier
-  list_dev
-  master
+* master
 ```
 
 Okay, only the one so far. The asterisk indicates that `master` is our current branch. We can make a new branch like so:
@@ -606,9 +607,8 @@ git branch
 ```
 
 ``` example
-* even_list_devier
   list_dev
-  master
+* master
 ```
 
 We've created a new branch… but we're still on master. To actually *use* our new branch, we need the next git command: `checkout`.
@@ -634,7 +634,6 @@ git branch
 ```
 
 ``` example
-  even_list_devier
 * list_dev
   master
 ```
@@ -652,7 +651,8 @@ git status
 ```
 
 ``` example
-On branch list_dev
+M       list.txt
+On branch even_list_devier
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
@@ -689,29 +689,26 @@ git commit -am "This is so important. Add it!"
 ```
 
 ``` example
-[list_dev b62ebd6] This is so important. Add it!
+[even_list_devier ebe7b4c] This is so important. Add it!
  4 files changed, 1 insertion(+)
  create mode 100644 so_important/critical_1
  create mode 100644 so_important/critical_2
  create mode 100644 so_important/critical_3
 ```
 
-And now, let's fat-finger a poorly considered delete:
+And now, let's do a poorly considered delete:
 
 ``` src
 rm -rf so_important
-```
-
-``` src
 ls -la
 ```
 
 ``` example
 total 8
-drwxr-xr-x   4 rossdonaldson  wheel  136 Feb 28 14:58 .
-drwxrwxrwt  19 root           wheel  646 Feb 28 14:53 ..
-drwxr-xr-x  12 rossdonaldson  wheel  408 Feb 28 14:58 .git
--rw-r--r--   1 rossdonaldson  wheel   51 Feb 28 14:58 list.txt
+drwxr-xr-x   4 rossdonaldson  wheel  136 Feb 28 17:19 .
+drwxrwxrwt  18 root           wheel  612 Feb 28 17:19 ..
+drwxr-xr-x  12 rossdonaldson  wheel  408 Feb 28 17:19 .git
+-rw-r--r--   1 rossdonaldson  wheel   51 Feb 28 17:19 list.txt
 ```
 
 Well crap. All our important stuff is completely gone. *Except*, we were smart developers and added it to git! Git knows something is up:
@@ -721,7 +718,7 @@ git status
 ```
 
 ``` example
-On branch list_dev
+On branch even_list_devier
 Changes not staged for commit:
   (use "git add/rm <file>..." to update what will be committed)
   (use "git checkout -- <file>..." to discard changes in working directory)
@@ -838,9 +835,9 @@ git branch -vv
 ```
 
 ``` example
-  even_list_devier 3535ef6 [origin/even_list_devier] Initial commit of a grocery list
-* list_dev         b62ebd6 This is so important. Add it!
-  master           3a55f60 Adding list.txt to version control
+* even_list_devier ebe7b4c [origin/even_list_devier] This is so important. Add it!
+  list_dev         5298dd9 Initial commit of a grocery list
+  master           5298dd9 Initial commit of a grocery list
 ```
 
 `[origin/even_list_devier]` means that `even_list_devier` is "tracking" an eponymous remote branch on `origin`. Yatta!
@@ -851,6 +848,11 @@ Now, we can make that command a little shorter. Remember in the <span id="orgtar
 echo "5. Gold Rings" >> list.txt
 git commit -am "Adding 5 Gold Rings to grocery list"
 git push
+```
+
+``` example
+[even_list_devier fa98a6c] Adding 5 Gold Rings to grocery list
+ 1 file changed, 1 insertion(+)
 ```
 
 Lovely.
@@ -870,11 +872,11 @@ git branch -av
 ```
 
 ``` example
-* even_list_devier                9280142 Adding 5 Gold Rings to grocery list
+* even_list_devier                fa98a6c Adding 5 Gold Rings to grocery list
   remotes/origin/HEAD             -> origin/even_list_devier
-  remotes/origin/even_list_devier 9280142 Adding 5 Gold Rings to grocery list
-  remotes/origin/list_dev         3bf5739 Initial commit of a grocery list
-  remotes/origin/master           3bf5739 Initial commit of a grocery list
+  remotes/origin/even_list_devier fa98a6c Adding 5 Gold Rings to grocery list
+  remotes/origin/list_dev         5298dd9 Initial commit of a grocery list
+  remotes/origin/master           5298dd9 Initial commit of a grocery list
 ```
 
 Ah, of course. We never pushed `master` or `list_dev`, so they aren't on the remote at all. Let's fix that:
@@ -899,11 +901,11 @@ git branch -avv
 ```
 
 ``` example
-* even_list_devier                9280142 [origin/even_list_devier] Adding 5 Gold Rings to grocery list
+* even_list_devier                fa98a6c [origin/even_list_devier] Adding 5 Gold Rings to grocery list
   remotes/origin/HEAD             -> origin/even_list_devier
-  remotes/origin/even_list_devier 9280142 Adding 5 Gold Rings to grocery list
-  remotes/origin/list_dev         3bf5739 Initial commit of a grocery list
-  remotes/origin/master           3bf5739 Initial commit of a grocery list
+  remotes/origin/even_list_devier fa98a6c Adding 5 Gold Rings to grocery list
+  remotes/origin/list_dev         5298dd9 Initial commit of a grocery list
+  remotes/origin/master           5298dd9 Initial commit of a grocery list
 ```
 
 There. Now, let's see what `git status` in demo-second-clone has to say:
@@ -927,9 +929,7 @@ git status
 
 ``` example
 On branch even_list_devier
-Your branch and 'origin/even_list_devier' have diverged,
-and have 3 and 4 different commits each, respectively.
-  (use "git pull" to merge the remote branch into yours)
+Your branch is up-to-date with 'origin/even_list_devier'.
 nothing to commit, working directory clean
 ```
 
@@ -954,6 +954,10 @@ cat list.txt
 git pull
 ```
 
+``` example
+Already up-to-date.
+```
+
 ``` src
 cat list.txt
 ```
@@ -963,29 +967,15 @@ cat list.txt
 2. Cheese
 3. Bacon
 4. kale
-<<<<<<< HEAD
 4. Orange Juice
 5. Gold Rings
-=======
-5. organge juice
-6. potato
-1. Eggs
-2. Cheese
-3. Bacon
-4. kale
->>>>>>> 3535ef6afbefff807377d387e5cdc92d3ef29797
 ```
 
 Voila.
 
-Merge Conflicts
----------------
-
-If we have time.
-
 Author: Ross Donaldson
 
-Created: 2016-02-28 Sun 14:58
+Created: 2016-02-28 Sun 17:19
 
 [Validate](http://validator.w3.org/check?uri=referer)
 
