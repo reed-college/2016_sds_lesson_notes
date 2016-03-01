@@ -1459,12 +1459,516 @@ cat list.txt
 
 Voila.
 
+* Doing Computer: Starting to Pull this All Together
+
+Okay: we know how to work a terminal. We know how to clone a git repo. Let's
+start pulling the pieces together. We'll start with some software development
+tools, and their relationship with our computers.
+
+** Getting Going: ~virtualenvs~ and ~virtualenvwrapper~
+Let's get rocking with two of the very few python packages you always want
+installed globally: [[https://virtualenv.readthedocs.org/en/latest/][virtualenv]] and [[https://virtualenvwrapper.readthedocs.org/en/latest/][virtualenvwrapper]]. The installation is done
+with ~pip~, and is the easy part:
+
+#+BEGIN_SRC sh :exports code :eval never
+pip install virtualenv virtualenvwrapper
+#+END_SRC
+
+But... what are they /for/? What do they /do/? Let's have a motivating example,
+shall we?
+
+Imagine you've installed python 3 as the default version of python on your
+computer. What's more, you've been noodling around a bunch in the python
+interpreter, using the ~requests~ library to do HTTP requests and the
+~beautifulsoup~ library to parse the results. You're having a perfectly nice time,
+until you decide to contribute to an open source project. You clone it, manually
+install a stack of dependencies for it, and... it detonates spectacularly. It
+was written for python 2! It uses an antique version of ~requests~ and an even
+older version of ~beautifulsoup~! Sturm und drang! Gnashing of teeth! If only
+there were a better way to separate your /system/ from a /project/.
+
+You can, perhaps, see where this is going.
+
+~virtualenv~ and ~virtualenvwrapper~ are two indispensable tools for, effectively,
+putting your projects in tidy boxes and managing them separately from the rest
+of your system. They work through a combination of /environment variables/ and
+manipulation of the Linux /path/. Let's talk about what on earth that means.
+
+*** The Environment
+So far, we've been considering the Terminal an interface to the file system. But
+it's more: the Terminal is, in some sense, very much like the python
+interpreter. That is, it's a running instance of a program which interprets
+commands and produces output. In this case, the interpreter is a "shell", which
+is also the broad family of languages we're now using. By default, OSX systems
+use Bourne Again SHell, usually called BASH. There's a small multitude of
+others. We wont be discussing them ;-P
+
+When you open a terminal, you are interacting with a shell /session/. Like python,
+BASH has a notion of /variables/, many of which are set by default when you start
+a session. These variables are part of your /environment/, and are referred to as
+/environment variables/.
+
+Remember when I told you your home dir is special to your computer? Here's
+another way that shows up: one environment variable set in every BASH session is
+called ~HOME~. (By convention, environment variables are always upper case.) We
+can view the value of ~HOME~ using two things: a dollar sign, and ~echo~, thus:
+
+#+BEGIN_SRC sh
+echo $HOME
+#+END_SRC
+
+#+RESULTS:
+: /Users/rossdonaldson
+
+Similarly, your user name is sorted in a variable called ~USER~:
+
+#+BEGIN_SRC sh
+echo $USER
+#+END_SRC
+
+#+RESULTS:
+: rossdonaldson
+
+You can see your entire environment all at once using the ~printenv~ command. I'm
+not going to put the results of that here for two reasons:
+
+1. The list can be /quite/ long
+2. It's not uncommon to store sensitive information, like api keys and
+   passwords, in environment variables. I /really/ don't want to accidentally put
+   one of those in a public github.
+
+That said: check out ~printenv~ on your own machine!
+
+Now, there's a particular environment variable we particularly care about right
+now. You could view it with ~echo~, but we're going to find it's value a different
+way: piping and grep.
+
+*** Standard In, Standard Out, Pipes, and Grep
+When you type ~echo $HOME~, your home dir appears in your terminal, and then
+you're returned to your prompt. Something like this, probably:
+
+#+BEGIN_EXAMPLE
+$ echo $HOME
+/Users/rossdonaldson
+$
+#+END_EXAMPLE
+
+What we're seeing is the result of a program, ~echo~, printing the value of a
+variable, ~HOME~, to /standard out/. Often written /stdout/, standard out is one of
+the three Linux standard streams. (Like many Linux things, the name hearkens
+back to a day when computers worked very differently, and is now mostly a
+legacy.) stdout equates to, "just stream the results of doing FOO back to
+whoever asked me to FOO" -- in this case, us, our terminal, echoing ~HOME~.
+
+Now, what if we want to send that output somewhere /other/ than our terminal? For
+instance, we could save it to a file, using the ~>~ operator:
+
+#+BEGIN_SRC sh :results verbatim
+mkdir -p /tmp/dev-demo && cd /tmp/dev-demo
+printenv > my_env.txt
+ls -l
+#+END_SRC
+
+#+RESULTS:
+: total 8
+: -rw-r--r--  1 rossdonaldson  wheel  883 Feb 28 18:45 my_env.txt
+
+The contents of my environment have been written to a file called
+my_env.txt. Note that ~>~ means, "take the results of the thing on the left and
+make them be the contents of the thing on the right" -- it's a destructive
+operation:
+
+#+BEGIN_SRC sh :dir
+echo 'no more env here' > my_env.txt
+cat my_env.txt
+#+END_SRC
+
+#+RESULTS:
+: no more env here
+
+For non-destructive addition, you could use ~>>~:
+
+#+BEGIN_SRC sh
+echo 'but now there is other stuff so ok?' >> my_env.txt
+cat my_env.txt
+#+END_SRC
+
+#+RESULTS:
+: no more env here
+: but now there is other stuff so ok?
+
+For a lark, we could count the lines in this file. To do this, we'll use the
+word count program, ~wc~, passing the ~-l~ file to count... lines.
+
+#+BEGIN_SRC sh
+wc -l my_env.txt
+#+END_SRC
+
+#+RESULTS:
+:        2 my_env.txt
+
+Okay, so that's good and useful. But what if we wanted to actually count the
+number of variables in our environment? Sure, we could ~printenv~ in to a file and
+then ~wc -l~ it, but there's a better way. For this, the operator we want is
+Pipe. The pipe operator, ~|~, shares the back-slash key on a stock Mac
+keyboard. It means, "take the results of the thing on my left and send them to
+the thing on my right". We can now count the number of variables in our
+environment without using a file at all:
+
+#+BEGIN_SRC sh
+printenv | wc -l
+#+END_SRC
+
+#+RESULTS:
+: 16
+
+What we're really doing is making use of one of the other three standard
+streams: standard input, or /stdin/. Most Linux command-line utilities can operate
+on a file *or*, if a file name is omitted, read from stdin. Pipe means, "take the
+stdout stream from the thing on the left and feed it to stdin on the
+right". (Similarly, ~>~ is, "take stdout from the left and write it to a file on
+the right", and ~>>~ is, "take stdout from the left and /append/ it to a file on the
+right".)
+
+Okay so counting variables is fine, but let's see something more useful:
+~grep~. ~grep~ searches for a pattern in a place, line by line. That place can be a
+file, sure -- but more useful is a stream. Let's grep our environment to find
+the value of our PATH:
+
+#+BEGIN_SRC sh
+printenv | grep PATH
+#+END_SRC
+
+#+RESULTS:
+: PATH=/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/texbin:/Applications/Emacs.app/Contents/MacOS/bin-x86_64-10_9:/Applications/Emacs.app/Contents/MacOS/libexec-x86_64-10_9:/Users/rossdonaldson/opt/pb/bin:/Users/rossdonaldson/java/hadoop/hadoop-0.20.2-cdh3u1/bin:/usr/local/spark/bin:/usr/bin:/Users/rossdonaldson/.dotfiles/bin
+
+Blam!
+
+*** The PATH
+So what exactly /is/ the ~PATH~, anyhow? First: see how there's all those colons in
+there? Let's look at the PATH another way:
+
+#+BEGIN_SRC sh
+  IFS=":" read -r -a paths <<< "$PATH"
+
+  for p in "${paths[@]}"; do echo $p; done
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+/usr/local/bin
+/usr/local/bin
+/usr/bin
+/bin
+/usr/sbin
+/sbin
+/usr/local/MacGPG2/bin
+/usr/texbin
+/Applications/Emacs.app/Contents/MacOS/bin-x86_64-10_9
+/Applications/Emacs.app/Contents/MacOS/libexec-x86_64-10_9
+/Users/rossdonaldson/opt/pb/bin
+/Users/rossdonaldson/java/hadoop/hadoop-0.20.2-cdh3u1/bin
+/usr/local/spark/bin
+/usr/bin
+/Users/rossdonaldson/.dotfiles/bin
+#+end_example
+
+The ~PATH~ is a concatenated list of directories, separated by ~:~. The ~PATH~ tells
+the shell how to find programs so you can run them. Let's have an example: say
+you want to run ~git~. The program ~which~ will tell you a) if a program can be
+found by a given name, and b) which program it is, so:
+
+#+BEGIN_SRC sh
+which git
+#+END_SRC
+
+#+RESULTS:
+: /usr/local/bin/git
+
+That was easy. We can confirm there really is a ~git~-named thing in
+~/usr/local/bin~ using ~ls~ and ~grep~ and our new Linux-pipe-friend:
+
+#+BEGIN_SRC sh
+ls -l /usr/local/bin | grep git
+#+END_SRC
+
+#+RESULTS:
+: lrwxr-xr-x  1 rossdonaldson  wheel        27 Feb 26 12:22 git -> ../Cellar/git/2.7.2/bin/git
+: lrwxr-xr-x  1 rossdonaldson  wheel        50 Feb 26 12:22 git-credential-osxkeychain -> ../Cellar/git/2.7.2/bin/git-credential-osxkeychain
+: lrwxr-xr-x  1 rossdonaldson  wheel        37 Feb 26 12:22 git-cvsserver -> ../Cellar/git/2.7.2/bin/git-cvsserver
+: lrwxr-xr-x  1 rossdonaldson  wheel        40 Feb 26 12:22 git-receive-pack -> ../Cellar/git/2.7.2/bin/git-receive-pack
+: lrwxr-xr-x  1 rossdonaldson  wheel        33 Feb 26 12:22 git-shell -> ../Cellar/git/2.7.2/bin/git-shell
+: lrwxr-xr-x  1 rossdonaldson  wheel        35 Feb 26 12:22 git-subtree -> ../Cellar/git/2.7.2/bin/git-subtree
+: lrwxr-xr-x  1 rossdonaldson  wheel        42 Feb 26 12:22 git-upload-archive -> ../Cellar/git/2.7.2/bin/git-upload-archive
+: lrwxr-xr-x  1 rossdonaldson  wheel        39 Feb 26 12:22 git-upload-pack -> ../Cellar/git/2.7.2/bin/git-upload-pack
+: lrwxr-xr-x  1 rossdonaldson  wheel        28 Feb 26 12:22 gitk -> ../Cellar/git/2.7.2/bin/gitk
+
+That's a lot of stuff with ~git~ in the name! And one of them is exactly what we
+were looking for: ~git~ itsown self.[fn:1]
+
+The thing to understand about the ~PATH~ is that your shell searches it /in order/,
+looking for a program that matches what you've asked for.
+
+*** Bringing it back to ~virtualenvs~
+
+A ~virtualenvironment~ works like this: a user-specified version of python (with a
+matching installation of pip) is installed in to a directory. Then, when the
+~virtualenv~ is /activated/, the ~PATH~ is altered: ~virtualenv~ temporarily appends its
+install directory to the front of the ~PATH~. This means that when you ask for
+~python~, you'll get the ~virtualenv~-specified version, and any packages installed
+with pip will be of a specified version. Let's see how this works in practice.
+
+First: which python is my default, system python?
+
+#+BEGIN_SRC sh
+which python
+#+END_SRC
+
+#+RESULTS:
+: /usr/local/bin/python
+
+Great. Now let's make a ~virtualenv~:
+
+#+BEGIN_SRC sh
+cd /tmp && mkdir venv-demo && cd venv-demo
+virtualenv .
+#+END_SRC
+
+#+RESULTS:
+: New python executable in /private/tmp/venv-demo/bin/python2.7
+: Also creating executable in /private/tmp/venv-demo/bin/python
+: Installing setuptools, pip, wheel...done.
+
+Great! Our new ~virtualenv~ is done. We activate it by sourcing a shell script
+called ~activate~ in a dir called ~bin~ (the traditional name for a directory of
+~binaries~, or executables):
+
+#+BEGIN_SRC sh :dir /tmp/venv-demo :exports both
+source bin/activate
+which python
+#+END_SRC
+
+#+RESULTS:
+: /private/tmp/venv-demo/bin/python
+
+Et voila! We're now using a totally different python. ~virtualenv~:
+activated. Now, when we install packages with pip, they'll be specific to this
+environment, not affecting our global state or other projects. ~virtualenv~ has
+appended its own directories to the front of the ~PATH~:
+
+#+BEGIN_SRC sh :dir /tmp/venv-demo :exports both
+source bin/activate
+echo $PATH
+#+END_SRC
+
+#+RESULTS:
+: /private/tmp/venv-demo/bin:/usr/local/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/texbin:/Applications/Emacs.app/Contents/MacOS/bin-x86_64-10_9:/Applications/Emacs.app/Contents/MacOS/libexec-x86_64-10_9:/Users/rossdonaldson/opt/pb/bin:/Users/rossdonaldson/java/hadoop/hadoop-0.20.2-cdh3u1/bin:/usr/local/spark/bin:/usr/bin:/Users/rossdonaldson/.dotfiles/bin
+
+When we ~source~ the ~activate~ script, we gain a new command: ~deactivate~. It --
+brace yourself for this -- deactivates the ~virtualenv~:
+
+#+BEGIN_SRC sh
+deactivate
+#+END_SRC
+
+*** Managing ~virtualenvs~
+~virtualenvs~ are good news; they help us solve the otherwise maddening problem of
+dependencies and python versions. But, now we have a new problem. Consider the
+contents of our project directory now:
+
+#+BEGIN_SRC sh :dir /tmp/venv-demo :exports both
+ls -la
+#+END_SRC
+
+#+RESULTS:
+: total 16
+: drwxr-xr-x   7 rossdonaldson  wheel  238 Feb 29 21:43 .
+: drwxrwxrwt   9 root           wheel  306 Feb 29 21:43 ..
+: lrwxr-xr-x   1 rossdonaldson  wheel   79 Feb 29 21:43 .Python -> /usr/local/Cellar/python/2.7.11/Frameworks/Python.framework/Versions/2.7/Python
+: drwxr-xr-x  16 rossdonaldson  wheel  544 Feb 29 21:43 bin
+: drwxr-xr-x   3 rossdonaldson  wheel  102 Feb 29 21:43 include
+: drwxr-xr-x   3 rossdonaldson  wheel  102 Feb 29 21:43 lib
+: -rw-r--r--   1 rossdonaldson  wheel   60 Feb 29 21:43 pip-selfcheck.json
+
+~bin~ is a directory of ~virtualenv~ stuff. ~lib~ is full of python executables. ~lib~
+is where pip installs packages into the ~virtualenv~ itself. Convinced this is a
+mess yet? No? Consider:
+
+#+BEGIN_SRC sh :dir /tmp/venv-demo :exports both
+git init
+git status
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Initialized empty Git repository in /private/tmp/venv-demo/.git/
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+	.Python
+	bin/
+	include/
+	lib/
+	pip-selfcheck.json
+
+nothing added to commit but untracked files present (use "git add" to track)
+#+end_example
+
+You do /not/ want any of that nonsense in ~git~. One solution is a good ~.gitignore~,
+which wouldn't be bad, but is easy to get wrong. Instead, consider: when we
+activate a ~virtualenv~, it appends its own binaries to the front of the
+~PATH~. What's stopping us from storing those binaries /somewhere else all
+together/? The answer is: absolutely nothing. ~virtualenvwrapper~ is a tool that
+helps us do exactly this, while providing a very clean interface.
+
+*** Setting up and using ~virtualenvwrapper~
+~virtualenvwrapper~ gives you the ability to set a single, configurable location
+into which all your ~virtualenvs~ will be installed. ~virtualenvwrapper~ uses an
+environment variable to configure where it does its installation, so the first
+thing to do is to get that set.
+
+We've already checked the value of environment variables. There are two common
+ways of setting them: per session and globally.
+
+To set a variable only in your current BASH session, use the ~export~ command:
+#+BEGIN_SRC sh
+export PLABBER='I am the plabber'
+echo $PLABBER
+#+END_SRC
+
+#+RESULTS:
+: I am the plabber
+
+This variable will vanish if you exit or reload your terminal, so it's a handy
+way to test something and a bad way to keep it.
+
+
+More commonly, we want new environment variables to persist. To do this, we use
+the same syntax as per-session, but instead of typing it in to the terminal, we
+write it in to a configuration file. BASH recognizes several configuration
+files; on OSX, users typically edit their ~.bash_profile~. For instance:
+
+#+BEGIN_SRC sh :eval never :exports code
+echo "export PLABBER='I am the plabber'" >> ~/.bash_profile
+#+END_SRC
+
+Now ~PLABBER~ is a permanent member of my profile. Glee.
+
+In any case: back to ~virtualenvwrapper~, which looks for an environment variable
+called ~WORKON_HOME~. Mine is set in my ~.bash_profile~, like this:
+
+#+BEGIN_SRC sh :eval never :exports code
+export WORKON_HOME=~/.python_venvs
+#+END_SRC
+
+While you're editing your ~.bash_profile~, ~virtualenvwrapper~ has one other thing
+that needs doing: it provides a file that needs to be /sourced/ -- that is, read
+in to the current environment, much like ~virtualenv~'s ~activate~ script -- so that
+we gain its full power. Add this, too:
+
+#+BEGIN_SRC sh :eval never :exports code
+source /usr/local/bin/virtualenvwrapper.sh
+#+END_SRC
+
+Now, things get good.
+
+*** A quick tour of ~virtualenvwrapper~
+#+BEGIN_SRC sh :exports neither :results silent :session venv
+source /usr/local/bin/virtualenvwrapper.sh
+export PS1="$"
+#+END_SRC
+
+You now have access to a set of marvelously useful commands with excellent
+properties. For instance: imagine we've made a new directory and we're setting
+up a python project in it:
+
+#+BEGIN_SRC sh
+cd /tmp && mkdir -p venv/venv-wrapper-demo && cd venv/venv-wrapper-demo
+git init
+echo "print 'hello world'" > hello.py
+ls -la
+#+END_SRC
+
+#+RESULTS:
+: Reinitialized existing Git repository in /private/tmp/venv/venv-wrapper-demo/.git/
+: total 8
+: drwxr-xr-x  4 rossdonaldson  wheel  136 Feb 29 22:59 .
+: drwxr-xr-x  3 rossdonaldson  wheel  102 Feb 29 22:59 ..
+: drwxr-xr-x  9 rossdonaldson  wheel  306 Feb 29 22:59 .git
+: -rw-r--r--  1 rossdonaldson  wheel   20 Feb 29 22:59 hello.py
+
+We decide it's time for a ~virtualenv~. Instead of using the ~virtualenv~ command
+directly, we use ~mkvirtualenv~:
+
+#+BEGIN_SRC sh :dir /tmp/venv/venv-wrapper-demo :results verbatim :exports both :session venv
+mkvirtualenv venv-demo
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+New python executable in /Users/rossdonaldson/.python_virtualenvs/venv-demo/bin/python2.7
+Also creating executable in /Users/rossdonaldson/.python_virtualenvs/venv-demo/bin/python
+Installing setuptools, pip, wheel...done.
+virtualenvwrapper.user_scripts creating /Users/rossdonaldson/.python_virtualenvs/venv-demo/bin/predeactivate
+virtualenvwrapper.user_scripts creating /Users/rossdonaldson/.python_virtualenvs/venv-demo/bin/postdeactivate
+virtualenvwrapper.user_scripts creating /Users/rossdonaldson/.python_virtualenvs/venv-demo/bin/preactivate
+virtualenvwrapper.user_scripts creating /Users/rossdonaldson/.python_virtualenvs/venv-demo/bin/postactivate
+virtualenvwrapper.user_scripts creating /Users/rossdonaldson/.python_virtualenvs/venv-demo/bin/get_env_details
+#+end_example
+
+Now, in our project dir we see:
+
+#+BEGIN_SRC sh :dir /tmp/venv/venv-wrapper-demo :results verbatim :exports both
+ls -la
+#+END_SRC
+
+#+RESULTS:
+: total 8
+: drwxr-xr-x  4 rossdonaldson  wheel  136 Feb 29 22:59 .
+: drwxr-xr-x  3 rossdonaldson  wheel  102 Feb 29 22:59 ..
+: drwxr-xr-x  9 rossdonaldson  wheel  306 Feb 29 22:59 .git
+: -rw-r--r--  1 rossdonaldson  wheel   20 Feb 29 22:59 hello.py
+
+Nothing different at all! The ~virtualenv~ has been created in an entirely
+different location. We can list our available ~virtualenvs~ like so:
+
+#+BEGIN_SRC sh :dir /tmp/venv/venv-wrapper-demo :results verbatim :exports both :session venv
+lsvirtualenv -b #brief mode, output can be long
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+adhoc-mashboard
+click-test
+cogs
+course-scheduler
+mashboard
+messaging-tactics
+mlingar-help
+moonbase
+redis-test
+reed-slackbot
+slackbort
+venv-demo
+vrfy
+wc_analysis
+wc_vincent
+#+end_example
+
+We can activate a ~virtualenv~ with the ~workon~ command:
+
+#+BEGIN_SRC sh :eval never :exports code
+workon venv-demo
+#+END_SRC
+
+And we can still deactivate with ~deactivate~.
 
 * <2016-03-06 Sun> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
 ** What on Earth Even Is This
-** The Environment and the PATH
-*** ~printenv~
-*** ~export~
 ** You Should Totally Get Familiar With:
 *** ~ls~
 
@@ -1502,3 +2006,13 @@ ls -la $HOME
 * <2016-04-10 Sun> -- Welcome to Databases
 * <2016-04-17 Sun> -- Database, Part Two: Electric Boogaloo
 * <2016-04-24 Sun> -- Testing. Testing. Testing.
+
+* Footnotes
+
+[fn:1] We can find only git exactly using a regex with ~grep~:
+#+BEGIN_SRC sh
+ls -la /usr/local/bin | grep -e 'git$'
+#+END_SRC
+
+#+RESULTS:
+: lrwxr-xr-x    1 rossdonaldson  wheel        27 Feb 26 12:22 git -> ../Cellar/git/2.7.2/bin/git
