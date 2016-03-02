@@ -1937,7 +1937,7 @@ Nothing different at all! The ~virtualenv~ has been created in an entirely
 different location. We can list our available ~virtualenvs~ like so:
 
 #+BEGIN_SRC sh :dir /tmp/venv/venv-wrapper-demo :results verbatim :exports both :session venv
-lsvirtualenv -b #brief mode, output can be long
+lsvirtualenv -b #-b is "brief mode"; output can be long
 #+END_SRC
 
 #+RESULTS:
@@ -1967,6 +1967,51 @@ workon venv-demo
 
 And we can still deactivate with ~deactivate~.
 
+** Starting Development
+:PROPERTIES:
+:header-args: :results verbatim :exports both
+:END:
+
+Step one: clone the repo
+#+BEGIN_SRC sh
+cd /tmp && mkdir l03 && cd l03
+git clone git@github.com:Gastove/slackbort.git
+#+END_SRC
+
+Step two: ~cd~ in to that directory and have a look around:
+#+BEGIN_SRC sh :dir /tmp/l03/slackbort
+ls -la
+#+END_SRC
+
+#+RESULTS:
+: total 32
+: drwxr-xr-x   8 gastove  wheel  272 Mar  1 22:06 .
+: drwxr-xr-x   3 gastove  wheel  102 Mar  1 22:06 ..
+: drwxr-xr-x  12 gastove  wheel  408 Mar  1 22:06 .git
+: -rw-r--r--   1 gastove  wheel   10 Mar  1 22:06 .gitignore
+: -rw-r--r--   1 gastove  wheel  145 Mar  1 22:06 README.md
+: -rw-r--r--   1 gastove  wheel   46 Mar  1 22:06 auth.cfg.tpl
+: -rw-r--r--   1 gastove  wheel   30 Mar  1 22:06 requirements.txt
+: drwxr-xr-x   4 gastove  wheel  136 Mar  1 22:06 slackbort
+
+Notice "requirements.txt" -- that's an extremely handy file. By convention, it
+contains the output of the pip command ~freeze~, which prints all installed
+packages with their versions from the current environment. Conveniently, pip
+prints this information in a format it can also read, using the ~-r <filename>~
+argument to ~pip install~. Let's make ~virtualenv~ and get the deps for this project
+installed:
+
+#+NAME: venv
+#+BEGIN_SRC sh
+source /usr/local/bin/virtualenvwrapper.sh
+#+END_SRC
+
+#+BEGIN_SRC sh :dir /tmp/l03/slackbort
+mkvirtualenv l03-slackbort
+#+END_SRC
+
+#+RESULTS:
+
 * <2016-03-06 Sun> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
 ** What on Earth Even Is This
 ** You Should Totally Get Familiar With:
@@ -1984,7 +2029,7 @@ ls -la $HOME
 *** ~top~
 *** ~ps~
 
-** If you work on remote servers:
+** If you work on, or interact with, remote servers:
 *** ~ssh~
 *** ~ping~
 *** ~rsync~
@@ -1995,10 +2040,12 @@ ls -la $HOME
 *** ~wc~
 *** ~sed~
 *** ~cut~
-
+*** ~find~
+*** ~xargs~
 ** For the brave: ~awk~
 *** ~strace~
 *** ~netstat~
+** Useful bits, bobs, and snippets
 * <2016-03-13 Sun> -- Writing Good Python
 ** PEP-8: Not Just a Good Idea
 ** There's a Tool For That
@@ -2016,3 +2063,12 @@ ls -la /usr/local/bin | grep -e 'git$'
 
 #+RESULTS:
 : lrwxr-xr-x    1 rossdonaldson  wheel        27 Feb 26 12:22 git -> ../Cellar/git/2.7.2/bin/git
+
+* Test
+#+BEGIN_SRC sh
+export PS1="$"
+echo 5
+#+END_SRC
+
+#+RESULTS:
+: 5
