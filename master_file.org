@@ -1878,8 +1878,11 @@ Now, things get good.
 
 *** A quick tour of ~virtualenvwrapper~
 #+BEGIN_SRC sh :exports neither :results silent :session venv
-source /usr/local/bin/virtualenvwrapper.sh
 export PS1="$"
+#+END_SRC
+
+#+BEGIN_SRC sh :exports neither :results silent :session venv
+source /usr/local/bin/virtualenvwrapper.sh
 #+END_SRC
 
 You now have access to a set of marvelously useful commands with excellent
@@ -1969,25 +1972,25 @@ And we can still deactivate with ~deactivate~.
 
 ** Starting Development
 :PROPERTIES:
-:header-args: :results verbatim :exports both
+:header-args: :results verbatim :exports both :session venv
 :END:
 
 Step one: clone the repo
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :dir ~/ :results silent
 cd /tmp && mkdir l03 && cd l03
 git clone git@github.com:Gastove/slackbort.git
 #+END_SRC
 
 Step two: ~cd~ in to that directory and have a look around:
-#+BEGIN_SRC sh :dir /tmp/l03/slackbort
-ls -la
+#+BEGIN_SRC sh
+cd slackbort && ls -la
 #+END_SRC
 
 #+RESULTS:
 : total 32
 : drwxr-xr-x   8 gastove  wheel  272 Mar  1 22:06 .
 : drwxr-xr-x   3 gastove  wheel  102 Mar  1 22:06 ..
-: drwxr-xr-x  12 gastove  wheel  408 Mar  1 22:06 .git
+: drwxr-xr-x  12 gastove  wheel  408 Mar  2 18:38 .git
 : -rw-r--r--   1 gastove  wheel   10 Mar  1 22:06 .gitignore
 : -rw-r--r--   1 gastove  wheel  145 Mar  1 22:06 README.md
 : -rw-r--r--   1 gastove  wheel   46 Mar  1 22:06 auth.cfg.tpl
@@ -2001,16 +2004,52 @@ prints this information in a format it can also read, using the ~-r <filename>~
 argument to ~pip install~. Let's make ~virtualenv~ and get the deps for this project
 installed:
 
-#+NAME: venv
 #+BEGIN_SRC sh
-source /usr/local/bin/virtualenvwrapper.sh
-#+END_SRC
-
-#+BEGIN_SRC sh :dir /tmp/l03/slackbort
 mkvirtualenv l03-slackbort
 #+END_SRC
 
 #+RESULTS:
+: New python executable in l03-slackbort/bin/python2.7
+: Also creating executable in l03-slackbort/bin/python
+: Installing setuptools, pip, wheel...done.
+: virtualenvwrapper.user_scripts creating /Users/gastove/.python_virtualenvs/l03-slackbort/bin/predeactivate
+: virtualenvwrapper.user_scripts creating /Users/gastove/.python_virtualenvs/l03-slackbort/bin/postdeactivate
+: virtualenvwrapper.user_scripts creating /Users/gastove/.python_virtualenvs/l03-slackbort/bin/preactivate
+: virtualenvwrapper.user_scripts creating /Users/gastove/.python_virtualenvs/l03-slackbort/bin/postactivate
+: virtualenvwrapper.user_scripts creating /Users/gastove/.python_virtualenvs/l03-slackbort/bin/get_env_details
+
+#+BEGIN_SRC sh :results silent
+pip install -r requirements.txt
+#+END_SRC
+
+(I'm mostly redacting the output from that command, but it should end with
+something much like this:)
+#+begin_example
+Successfully installed requests-2.9.1 wheel-0.29.0
+#+end_example
+
+For the sake of thoroughness, we can now compare ~pip freeze~ and
+~requirements.txt~:
+
+#+BEGIN_SRC sh :eval never :exports code
+pip freeze
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+requests==2.9.1
+wheel==0.29.0
+#+END_EXAMPLE
+
+#+BEGIN_SRC sh
+cat requirements.txt
+#+END_SRC
+
+#+RESULTS:
+: requests==2.9.1
+: wheel==0.29.0
+
+Perfect.
+
 
 * <2016-03-06 Sun> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
 ** What on Earth Even Is This
