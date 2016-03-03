@@ -1459,7 +1459,7 @@ cat list.txt
 
 Voila.
 
-* Doing Computer: Starting to Pull this All Together
+* <2016-03-06 Sun> -- Doing Computer: Starting to Pull this All Together
 
 Okay: we know how to work a terminal. We know how to clone a git repo. Let's
 start pulling the pieces together. We'll start with some software development
@@ -2051,7 +2051,7 @@ cat requirements.txt
 Perfect.
 
 
-* <2016-03-06 Sun> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
+* <2016-03-13 Sun> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
 ** What on Earth Even Is This
 ** You Should Totally Get Familiar With:
 *** ~ls~
@@ -2085,9 +2085,6 @@ ls -la $HOME
 *** ~strace~
 *** ~netstat~
 ** Useful bits, bobs, and snippets
-* <2016-03-13 Sun> -- Writing Good Python
-** PEP-8: Not Just a Good Idea
-** There's a Tool For That
 * <2016-04-03 Sun> -- Web Servers: What do?
 * <2016-04-10 Sun> -- Welcome to Databases
 * <2016-04-17 Sun> -- Database, Part Two: Electric Boogaloo
