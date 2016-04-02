@@ -2599,12 +2599,52 @@ VPNs]].
 
 You should know that you /can/ serve content to the Public Internet from your
 laptop. You almost certainly don't want to do this. Beware of any bug fix or
-problem solving that suggests you serve your content on ~0.0.0.0~ -- that means,
-"respond to requests from the public internet" and it's very likely not what
-you're trying to do.
+problem solving suggestion that suggests you serve your content on ~0.0.0.0~ --
+that means, "respond to requests from the public internet" and it's very likely
+not what you're trying to do.
+
+**** Let's check in with that computer/server conversation again
+
+So now, with DNS and a sense of the basics of HTTP, our conversation looks like this:
+
+
+- You, the User :: Computer, bring me thewebpage.com
+- Computer :: Great. Do I know the IP address of a DNS server? *checks* Yes, I
+     do. Hey DNS Server!  What the hell is thewebpage.com?
+- DNS Server :: I'm not sure, but I know a DNS Server who does. Talk to the
+     server at this IP Address.
+- Computer :: Hokay. Hey next DNS Server. What the hell is thewebpage.com?
+- Next DNS Server :: Oh, it's this -- have an IP Addres.
+- Computer :: Great. Hey thewebpage.com! I'd like to ~GET~ the root
+     resource at ~/~, please!
+- The Server :: 200 OK you got it! Here's a ~text/html~ response body for my root
+     ~index.html~. Also can you hang on to this cookie for me? Send it back to me
+     next time so I can keep track of you a little.
+- Computer :: Great. Hey the User: here is some rendered HTML.
+
+Now. A /lot/ of how that last bit goes is actually a function of the /architecture/
+of the web application in question. So:
 
 *** What the crap is "architecture"
+A shorter, clearer way to frame this is, "how is your application built?" What
+are the pieces? Is there a database? What is the client like? How do you scale
+your app for traffic? Now: this is a whole buuuuunch of questions, and there are
+a lot we aren't going to get to just yet. For now, we're going to ignore the
+computer that runs your code and only talk about the code, which will have one
+or both of these components:
 
+- A Web Server :: some flavor of code you've written that responds to HTTP
+     requests with HTTP/JavaScript/images/etc.
+- A Client :: Probably almost entirely JavaScript; might talk to a Server,
+     rendering results. Might be the entire deal, for sufficiently simple apps.
+
+You might also have a database! We're gonna start talking about them next
+week. Right now, what you need to know is that a database stores stuff, in a
+durable way, for repeat access and manipulation.
+
+*** Yes OK Good let's look at a web app
+[[https://github.com/Gastove/http-demo][Here's a demo web app!]] We'll be working our way through the pieces. You can
+clone and virtualenv it, in the traditional manner.
 
 * <2016-04-10 Sun> -- Welcome to Databases
 Okay, this is a topic I love. Databases! Just say it with me. /Databases/. So
