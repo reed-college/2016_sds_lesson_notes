@@ -2296,9 +2296,9 @@ echo "fizz" >> /tmp/fizz.txt
 #+END_SRC
 
 We could change all the "fizz"s to "buzz"s so:
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :exports both
 cat /tmp/fizz.txt | sed -e "s/fizz/buzz/"
-#+END_SRC
+#+END_SRCn
 
 #+RESULTS:
 : buzz
@@ -2475,7 +2475,7 @@ spectrum) color links you've already clicked.
 So: we know that clients and servers exchange messages using the same
 format. We've seen status codes in an HTTP response; for a request, the
 equivalent piece of the puzzle is a /verb/ and a /resource/. Let's use ~curl -v~ to
-see what the request we're sending looks like:
+see what our /request/ looks like -- what the server is actually responding to:
 #+BEGIN_EXAMPLE
 curl -v http://thermador.herokuapp.com
  Rebuilt URL to: http://thermador.herokuapp.com/
@@ -2503,19 +2503,20 @@ which is useful but not particularly interesting (it'll almost always be
 1.1). Let's focus on ~GET /~.
 
 ~/~ is our /resource/. In much the same way ~/~ represents the root of the file system
-on our Linux computers, here ~/~ is the root of the website we're viewing. Now, several
-fun bits of obfuscation on the modern web: notice that in my ~curl~ request, I
-didn't specify I wanted ~/~ -- ~curl~ automatically "rebuilt" the URL to include
-it. Remember the format of URIs? As a reminder, it's this:
+on our Linux computers, here ~/~ is the root of the website we're viewing. Now,
+several fun bits of obfuscation on the modern web: notice that in my ~curl~
+request, I didn't specify I wanted ~/~ -- ~curl~ automatically "rebuilt" the URL to
+include it. Remember the format of URIs? As a reminder, it's this:
 
 #+BEGIN_EXAMPLE
  scheme:[//[user:password@]host[:port]][/]path[?query][#fragment]
 #+END_EXAMPLE
 
 A URL (Uniform Resource /Locator/) is a more specific form of URI in which the
-network transport (that is, the /scheme/) is always specified. For instance, in
-the URL ~http://www.google.com~, ~http~ is the /scheme/ and ~www.google.com~ is the
-/host/. What's being implicitly added is the ~/~ that indicates the root resource at
+scheme[fn:5] is always specified. For instance, in the URL
+~http://www.google.com~, ~http~ is the /scheme/. User and password are omitted most of
+the time on the Internet-at-large, so they're absent; ~www.google.com~ is the
+/host/.  What ~curl~ has implicitly added is the ~/~ that indicates the root resource at
 the given host. (Modern web browsers make this all even more opaque by eliding
 more and more of a given URL -- for instance, we typically don't see the scheme
 or the port in a URL, even if we specify them.)
@@ -2523,15 +2524,18 @@ or the port in a URL, even if we specify them.)
 There's a second tier of obfuscation: by convention, specifying a resource
 either as ~/~ or ending in ~/~ means, "give me a document named index.html at
 location ~/~". So we ask for ~www.google.com~, which implicitly means
-~www.google.com/~, which is /actually/ ~wwww.google.com/index.html~. Meanwhile the
-browser just shows us that we're at ~www.google.com~. Great.
+~www.google.com/~. A web server can return whatever it likes for the root
+resource; in the absence of anything else, by convention a page called
+~index.html~ is returned. So the URL we've gotten might /actually/ be
+~wwww.google.com/index.html~, while the browser just shows us that we're at
+~www.google.com~. Great.
 
-~GET~ is an HTTP /verb/ (technically /methods/, but I find /verb/ to be clearer). It
-describes what action we want to take on the thing we're requesting. ~GET~ is far
-and away the most common -- it means, "just give me the thing I asked for, maybe
-with some parameters". (~GET~ is so common that it's the default for tools like
-~curl~, though other verbs can be specified.) There are others; the other two
-you're likely to come across are:
+~GET~ is an HTTP /verb/ (technically /methods/, but /verb/ is common parlance and I find
+it to be clearer). It describes what action we want to take on the thing we're
+requesting. ~GET~ is far and away the most common -- it means, "just give me the
+thing I asked for, maybe with some parameters". (~GET~ is so common that it's the
+default for tools like ~curl~, though other verbs can be specified.) There are
+others; the other two you're likely to come across are:
 
 - ~POST~ -- "Upload this information to this resource"; commonly used in web forms.
 - ~DELETE~ -- Delete whatever is described by this resource
@@ -2546,7 +2550,7 @@ this:
      for my root ~index.html~. Also can you hang on to this cookie for me? Send it
      back to me next time so I can keep track of you a little.
 
-**** But Wait, There's More: IP Addresses, ~localhost~, and a touch of DNS
+**** But Wait, There's More: IP Addresses, ~localhost~, ports, and a touch of DNS
 Okay, here's a fun one: there is no such thing as ~www.google.com~. Or, more
 precisely: there is no /one/ thing that is ~www.google.com~, and none of the things
 that serve ~www.google.com~ URLs have any idea what this "google dot com" nonsense
@@ -2577,6 +2581,8 @@ hostanme/IP Address combo: ~localhost~. ~localhost~, which on Macs has the defau
 IP address of 127.0.0.1, is your computers way to refer to itself. When you run
 a web server on your laptop for local development, the /host/ you'll specify in
 your URL is ~localhost~.
+
+A cool true fact:
 
 Desperately want to know more about DNS? Start with Monica Dinculescu's [[http://meowni.ca/posts/go-cat-dns-go/][Cat DNS]]
 -- the DNS server that resolves everything to cats.
@@ -2645,6 +2651,96 @@ durable way, for repeat access and manipulation.
 *** Yes OK Good let's look at a web app
 [[https://github.com/Gastove/http-demo][Here's a demo web app!]] We'll be working our way through the pieces. You can
 clone and virtualenv it, in the traditional manner.
+
+Turn on yer virtualenv and run this thing with:
+
+#+BEGIN_SRC python :eval never
+python http-demo
+#+END_SRC
+
+If it works, you should see a little bit of logging in your terminal. You should
+also be able to go to http://localhost:5000 in your web browser of choice and see a
+tiny little message. Wee!
+
+*** So what's going on here?
+There's now a little Python web server running on your computer. It's host is
+~localhost~ (127.0.0.1, as you'll recall), and its port is 5000. (When we develop
+locally, we almost always have to specify a port; when we use the Internet at
+Large we almost never do.) You'll notice you'll get the same web page if you ask
+for localhost:5000, localhost:5000/, or localhost:5000/index.html.
+
+Inside ~http-demo~ is a method that listens for ~/~ or ~/index.html~, and responds by
+"serving static HTML". /Static/ here means, "unchanging" -- the opposite of
+/dynamic/, which we'll define in just a few more paragraphs. Look in ~static/html~;
+you'll see a file named ~index.html~. Its contents are precisely identical to what
+you'll see in your web browser if you inspect the source of the page you're
+seeing.
+
+In Flask, at least, your methods barely have to do anything at all. Go to
+~localhost:5000/minimal~; those words are the only words in the corresponding
+method in ~http-demo~. Flask adds just a /touch/ of wrapping HTML, and it appears in
+the browser. Neat.
+
+It turns out that when we talk about serving static files, we're almost never
+talking about serving pure HTML files. More commonly, we'll talk about /static
+assets/, and what we'll be referring to is content like images and CSS (we'll be
+discussing what CSS is Soon). If you make a directory inside ~static~ called ~gifs~,
+and put a gif in there, you can now access it by name at
+~localhost:5000/gifs/<gif_name>~. Neat? Neat.
+
+Now let's head to http://localhost:5000/helloworld. It's got... slightly more to
+it! (Very, very slightly.) In fact, it can do a trick. Try
+http://localhost:5000/helloworld/ + your name
+(http://localhost:5000/helloworld/Ross, for instance). Neat, eh?
+
+The ~helloworld~ resource is returning HTML, but it's doing a handy trick called
+/server-side rendering/. It works like this: there is a template called
+~hello.html~, which uses a templating system called Jinja. When you ask for
+~helloworld/Ross~, for instance, the /Ross/ part of the URL is captured as a
+variable. Flask then loads and /renders/ the ~hello.html~ template, which creates
+the HTML that's then sent back to your browser.
+
+Here's another way this can be used: head to http://localhost:5000/form. Pick a
+beverage and hit ~Yar~. Now there's a result! M A G I C. Okay, more template
+rendering -- in this case, ~form~ is a static page (not a template) that uses ~POST~
+to pass data from itself to the ~yousaid~ resource, which renders a template.
+
+*** So where does JavaScript fit in?
+Terrific question. This demo doesn't currently account for JavaScript, because
+there's a /lot/ JS can do. This gets us back to the slowly-expanding idea of
+Architecture. See, right now, ~http-demo~ is an entirely server-side
+application. A little Flask app serves rendered HTML to your browser /and that's
+pretty much it/. These pages are still basically static -- they arrive at the
+browser fully formed and with very litter interactivity, save for what HTML
+itself provides (forms, for instance).
+
+We could change this by adding a little JavaScript. HTML pages can define a
+~script~ tag, which will cause that page to load in, well, a script (almost always
+JavaScript). Our app can serve JS scripts just like any other static asset, and
+now our page can have a little interactivity -- maybe a little navigation menu,
+say. Fundamentally, all the action still really happens on the server, but with
+JS we can program in the browser and Do More. HTML is what you can /see/; JS is
+really what you can /do/. (It will accomplish this task, almost always, by
+creating either HTML or SVG images, or by modifying CSS.)
+
+But there's another option: make a /client out of pure JavaScript/. My personal
+web site works like this. There are, in effect, /two/ HTTP servers. One is the
+server-side application, which is written in Clojure, and has routes like
+http://thermador.herokuapp.com/api/page/about -- which you can go to in your
+browser. Looks... pretty weird, right? Not super useful.
+
+But then you head to http://www.gastove.com, and you see a Real Thing. This is
+the /second/ HTTP server, which really actually only serves one thing -- a
+JavaScript application. When you click on links in that application, JavaScript
+intercepts the routes, parses them, and then asks the server for content. This
+is called a /Single Page Application/ -- the only "page" in my client is an
+index.html that loads JavaScript, and then JS does /everything
+else/. Specifically, it communicates with my server using a paradigm called REST
+(REpresentational State Transfer) -- the JS client says, "hey, I need the pages
+of this site!", and the Server responds with a JSON blob describing all of them,
+which the JS then turns in to HTML.
+
+As you might apprehend, this can get complex in a hurry.
 
 * <2016-04-10 Sun> -- Welcome to Databases
 Okay, this is a topic I love. Databases! Just say it with me. /Databases/. So
@@ -2982,6 +3078,9 @@ ls -la $HOME
 ** Useful bits, bobs, and snippets
 
 * Footnotes
+
+[fn:5] Sometimes the scheme is also referred to as the /network transport/. Thank
+god we aren't stuck with only one name for one thing -- can you imagine.
 
 [fn:4] Are there more normal forms? Why yes! But they rapidly become more and
 more difficult to reason about, and it's unlikely you'll need to understand
