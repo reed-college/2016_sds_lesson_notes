@@ -2265,8 +2265,8 @@ provides (that is, /serves/) content using a communication protocol called HTTP
 (sometimes HTTPS). In this way, two computers -- say, your computer and a server
 -- can have a conversation roughly like this:
 
-- Your Computer :: Hey Server! Gimme thewebpage.com!
-- The Server:: You got it! Here it is.
+- Your Computer: Hey Server! Gimme thewebpage.com!
+- The Server: You got it! Here it is.
 
 Today we're going to expand the above exchange -- make it considerably more
 detailed and accurate. Note that our goal is a working mental model, *not* an
@@ -2389,8 +2389,8 @@ newline, body. Boom.
 HTTP interactions have two parts: a /request/ and a /response/. This is about what
 it sounds like:
 
-- <REQUEST> Your Computer :: Hey Server! Gimme thewebpage.com!
-- <RESPONSE> The Server :: You got it! Here it is.
+- <REQUEST> Your Computer: Hey Server! Gimme thewebpage.com!
+- <RESPONSE> The Server: You got it! Here it is.
 
 HTTP uses the same message format for both requests and responses. From here,
 we'll refer to the requestor by a more accurate, general name: the /client/. The
@@ -2553,9 +2553,9 @@ others; the other two you're likely to come across are:
 Our conversation between client and server could now be fleshed out to look like
 this:
 
-- <REQUEST> Your Computer :: Hey thewebpage.com! I'd like to ~GET~ the root
+- <REQUEST> Your Computer: Hey thewebpage.com! I'd like to ~GET~ the root
      resource at ~/~, please!
-- <RESPONSE> The Server :: 200 OK you got it! Here's a ~text/html~ response body
+- <RESPONSE> The Server: 200 OK you got it! Here's a ~text/html~ response body
      for my root ~index.html~. Also can you hang on to this cookie for me? Send it
      back to me next time so I can keep track of you a little.
 
@@ -2572,13 +2572,13 @@ need to know much at all about how they actually work.
 The system that maps host names to IP Addresses is called a /Domain Name System/,
 or DNS. Here's a gross oversimplification of how this works:
 
-- You, the User :: Computer, bring me www.google.com
-- Computer :: Great. Do I know the IP address of a DNS server? *checks* Yes, I
+- You, the User: Computer, bring me www.google.com
+- Computer: Great. Do I know the IP address of a DNS server? *checks* Yes, I
      do. Hey DNS Server!  What the hell is www.google.com?
-- DNS Server :: I'm not sure, but I know a DNS Server who does. Talk to Google's
+- DNS Server: I'm not sure, but I know a DNS Server who does. Talk to Google's
      DNS Server -- have an IP address.
-- Computer :: Hokay. Hey Google's DNS Server. What the hell is www.google.com?
-- Google's DNS Server :: Oh, it's this -- have an IP Addres.
+- Computer : Hokay. Hey Google's DNS Server. What the hell is www.google.com?
+- Google's DNS Server : Oh, it's this -- have an IP Addres.
 
 So: DNS is a hierarchical system by which a computer can talk to a general
 lookup service and reach more specific lookup services until it can talk to a
@@ -2623,19 +2623,19 @@ not what you're trying to do.
 So now, with DNS and a sense of the basics of HTTP, our conversation looks like this:
 
 
-- You, the User :: Computer, bring me thewebpage.com
-- Computer :: Great. Do I know the IP address of a DNS server? *checks* Yes, I
+- You, the User: Computer, bring me thewebpage.com
+- Computer: Great. Do I know the IP address of a DNS server? *checks* Yes, I
      do. Hey DNS Server!  What the hell is thewebpage.com?
-- DNS Server :: I'm not sure, but I know a DNS Server who does. Talk to the
+- DNS Server: I'm not sure, but I know a DNS Server who does. Talk to the
      server at this IP Address.
-- Computer :: Hokay. Hey next DNS Server. What the hell is thewebpage.com?
-- Next DNS Server :: Oh, it's this -- have an IP Addres.
-- Computer :: Great. Hey thewebpage.com! I'd like to ~GET~ the root
+- Computer: Hokay. Hey next DNS Server. What the hell is thewebpage.com?
+- Next DNS Server : Oh, it's this -- have an IP Addres.
+- Computer: Great. Hey thewebpage.com! I'd like to ~GET~ the root
      resource at ~/~, please!
-- The Server :: 200 OK you got it! Here's a ~text/html~ response body for my root
+- The Server: 200 OK you got it! Here's a ~text/html~ response body for my root
      ~index.html~. Also can you hang on to this cookie for me? Send it back to me
      next time so I can keep track of you a little.
-- Computer :: Great. Hey the User: here is some rendered HTML.
+- Computer: Great. Hey the User: here is some rendered HTML.
 
 Now. A /lot/ of how that last bit goes is actually a function of the /architecture/
 of the web application in question. So:
@@ -2648,9 +2648,9 @@ a lot we aren't going to get to just yet. For now, we're going to ignore the
 computer that runs your code and only talk about the code, which will have one
 or both of these components:
 
-- A Web Server :: some flavor of code you've written that responds to HTTP
+- A Web Server: some flavor of code you've written that responds to HTTP
      requests with HTTP/JavaScript/images/etc.
-- A Client :: Probably almost entirely JavaScript; might talk to a Server,
+- A Client: Probably almost entirely JavaScript; might talk to a Server,
      rendering results. Might be the entire deal, for sufficiently simple apps.
 
 You might also have a database! We're gonna start talking about them next
