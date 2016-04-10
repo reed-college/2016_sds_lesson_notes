@@ -3339,6 +3339,9 @@ are set, the other three must be set.
 | delivery_method | ~enum('in-store', 'shipped')~ | ~NULL~                      |
 |-----------------+-----------------------------+---------------------------|
 
+This schema uses the SQL ~enumeration~ type, which restricts the the value of the
+column to a specified set of values.
+
 **** orders
 
 |---------------+-------------------------+---------------------------|
@@ -3349,6 +3352,37 @@ are set, the other three must be set.
 | item_quantity | ~integer~                 | ~NOT NULL~                  |
 | ordered_on    | ~timestamp with timezone~ | ~DEFAULT CURRENT_TIMESTAMP~ |
 |---------------+-------------------------+---------------------------|
+
+*** Exercise: make your own schema
+
+**** Classes
+|----------------+---------------+------------+--------------------+------------+-------------------+----------------+------------+------------------+--------------------+------------|
+| Course Name    | Course Number | Room       | Computers in Room? | Projector? | Maximum Occupancy | Student Name   | Student ID | Status           | Professor          | Department |
+|----------------+---------------+------------+--------------------+------------+-------------------+----------------+------------+------------------+--------------------+------------|
+| Humanities 110 |           110 | ETC 225    | Yes                | Yes        |                30 | Ross Donaldson | A123456    | Quadruple-Senior | Steven Wasserstrom | Religion   |
+| Humanities 110 |           110 | Elliot 138 | No                 | Yes        |                15 | Harmon Kardon  | B654321    | Freshman         | Nigel Nicholson    | Classics   |
+|----------------+---------------+------------+--------------------+------------+-------------------+----------------+------------+------------------+--------------------+------------|
+
+**** Game Events
+|--------+--------------------+------+------------+-----------+-------+-------+------+-------------------------------------+----------+--------------------+---------------|
+| Player | Character          | Tier | Hit Points | Class     | Level |    XP | Gold | Inventory                           | Action   | Action Target      | Action Effect |
+|--------+--------------------+------+------------+-----------+-------+-------+------+-------------------------------------+----------+--------------------+---------------|
+| Ross   | Bork the Barbarian | Free |        100 | Barbarian |     5 | 12391 |    0 | Club, Armor, Roast Chicken, Boots   | Attack   | Orc                | 12 damage     |
+| n/a    | Orc                | n/a  |         30 | n/a       |     3 |   500 |   10 | Sword, Orc Hat                      | Attacked | Bork the Barbarian | 12 damage     |
+| n/a    | Orc                | n/a  |         18 | n/a       |     3 |   500 |   10 | Sword, Orc Hat                      | Attack   | Bork the Barbarian | 8 damage      |
+| Bey    | Morrigan           | Paid |       5000 | Wizard    |    35 | 28549 | 3000 | Mega Wand, Platinum Single          | Buy      | Rad Hat            | 20 gold       |
+| Ross   | Bork the Barbarian | Free |         92 | Barbarian |     5 | 12391 |    0 | Club, Armor, Roast Chicken, Boots   | Attacked | Orc                | 8 damage      |
+| Bey    | Morrigan           | Paid |       5000 | Wizard    |    35 | 28549 | 2980 | Mega Wand, Platinum Single, Rad Hat | Receive  | Rad Hat            | -20 gold      |
+|--------+--------------------+------+------------+-----------+-------+-------+------+-------------------------------------+----------+--------------------+---------------|
+
+**** Library
+|-------------------------+----------------------------------------------------------+----------+------------+-----------+----------------+-------+---------+------------------+------------+------------+-----------------------------------------------|
+| Title                   | Author                                                   | Type     | Issue Date | In Print? | Publisher      | Total | Present | On-Loan To       |   Due Date | For Course | Location                                      |
+|-------------------------+----------------------------------------------------------+----------+------------+-----------+----------------+-------+---------+------------------+------------+------------+-----------------------------------------------|
+| The Wind in the Willows | Kenneth Grahame                                          | Book     |       1908 | Yes       | Methuen        |     5 |       3 | Ross Donaldson   | 2016-04-10 | n/a        | Reed Library Pollock Room (PR4726 .W5 1940b ) |
+| The Wind in the Willows | Kenneth Grahame                                          | Book     |       1908 | Yes       | Methuen        |     5 |       3 | Student McAlumni | 2016-05-10 | Lit 235    | Reed Library Pollock Room (PR4726 .W5 1940b ) |
+| Romeo and Juliette      | Sergey Prokofiev, Esa-Pekka Salonen, Berlin Philharmonic | Audio CD |            |           | Sony Classical |     1 |       1 |                  |            | Music 348  | Online Access                                 |
+|-------------------------+----------------------------------------------------------+----------+------------+-----------+----------------+-------+---------+------------------+------------+------------+-----------------------------------------------|
 
 * <2016-04-17 Sun> -- Database, Part Two: the Sequel
 ** Building a Database
