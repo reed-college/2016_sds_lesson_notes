@@ -2753,7 +2753,7 @@ As you might apprehend, this can get complex in a hurry.
 
 * <2016-04-10 Sun> -- Welcome to Databases
 Okay, this is a topic I love. Databases! Just say it with me. /Databases/. So
-good.
+good. Day-tuh-bace. /Yes/.
 
 We're going to focus particularly on /relational databases/, though I'll mention a
 few other kinds. We'll do some theory, and then we'll learn some SQL. We'll be
@@ -2776,9 +2776,81 @@ once, manually, use Microsoft Access, Microsoft Excel, Filemaker Pro --
 something far lighter weight than setting up a DB and an application to access
 it with.
 
-If the number of simultaneous users of a data store is greater than one, or
-there is a single "user" that is a piece of software, it's probably better to
-use a database.
+Use a database if:
+- The number of simultaneous users of a data store is greater than one, or
+- There is a single "user" that is a piece of software, or
+- You could reasonably expect your data to take up gigabytes of storage
+
+** Flavors and Styles
+"Databases" is a pretty large topic, and many engineers make long, successful
+careers out of specializing in database development or administration, or their
+skill in implementing particular kinds of databases. There are a lot of kinds of
+databases we wont be spending very much time with, but it's worth knowing
+something about the field -- what's available.
+
+First, let's establish what a database /is/. I think of a database as having, at
+minimum, two properties:
+
+1. A database stores discrete pieces of data /on disk/, not (or not /just/) in
+   memory.
+2. A database offers a mechanism for /querying/ its contents.
+
+Postgres, which many of you will be using, certainly satisfies both points: data
+is written do disk, where it's safe; you can retrieve a piece of data from the
+database pretty easily. LokiJS bills itself as an /in-memory database/ -- which is
+to say, no kind of database at all. Loki is a data /store/, which is a perfectly
+valid and excellent thing to be. But persistence isn't baked in to Loki; it can
+make no guarantees about the safety of your data. Therefore: not a database.
+
+Beyond those two properties, I find it useful to think of modern databases
+according to how they organize their data -- what kind of /schema/ do they
+use. We wind up with a couple rough categories:
+
+*** Relational databases
+A relational database stores data in units of rows and columns -- each row is an
+entity, each column is a thing we can know about that entity. One particular
+grouping of rows and columns is a table. Two tables can be connected (that is,
+/related/) by mutual columns, allowing the construction of larger and more
+sophisticated views of the data.
+
+Relational databases often have the property of being /transactional/. A
+transaction is a way of grouping and thinking about the set of changes you're
+going to make to a database.
+
+We'll be using and talking about relational databases almost exclusively for the
+foreseeable future of the SDS.
+
+Common Relational Databases:
+- PostgreSQL
+- MySQL
+- Microsoft SQL Server
+
+*** Column Stores
+While a relational database stores your data in tables, a column store
+associates a key with a column. That is: where a relational database stores
+pieces of data grouped together by some kind of semantic meaning, a column store
+tries to group all the data together that pertains to a single entity. While you
+as a user might have information stored in a relational database in a ~customers~
+table and an ~addresses~ table and a ~purchases~ table, in a column store, all the
+data for you would be stored in a single you-column.
+
+Common Column Stores:
+- Amazon RedShift
+- Cassandra
+- Druid
+- HBase
+
+*** Key-value Stores
+A key-value store is, effectively, a schema-less place to put data. Sometimes
+called "NoSQL" databases, these systems hang on to some kind of blob of
+information and hand it back to you when you ask.
+
+This is... not as often a good idea as the makers would have you believe.
+
+Notable key-value stores:
+- Redis
+- MongoDB
+- Couchbase
 
 ** Let's Refactor some Information
 Let's imagine we're working with the purchase record of a small business. It's
@@ -3027,17 +3099,258 @@ specifically, do we get out of this?
 2. What we've produced here is dramatically easier to keep up to date and
    accurate. Consider: we only have *one* place to update if Van Rijn's address
    changes. Now: that also means that if we update data, historical data is lost
-   -- but this model also allows us to fix that, and we will in the next
-   section. We know how many of a given item we have, and its current price
-   (again, another piece of data we'll want to work with in the future.)
+   -- but this model also allows us to fix that, if we'd like. We know how many
+   of a given item we have, and its current price (again, another piece of data
+   we'll want to work with in the future.)
 3. We can now answer more specific questions more easily. "How many customers do
    we have in Portland" would have been a tedious chore in the old system; it's
    comparatively easy in the new one.
 
-Our data at this point has a special property: it's in First Normal Form. Every
-entity contains no duplicate rows and has a clear way to identify a row as
-unique.[fn:4]
+Our data at this point has a special property: it's in First Normal Form
+(abbreviated 1NF). Every entity contains no duplicate rows and has a clear way
+to identify a row as unique.[fn:4] This matters partly for questions of database
+usability -- imagine how much harder it would be to write code to update a
+customer's address if you had multiple addresses, or if each address came as a
+single string unit along with a customer's full name.
 
+The other part of 1NF's value is its role in being able to assert the
+correctness of the data in a database. The theoretical underpinning of
+relational databases is a field called [[https://en.wikipedia.org/wiki/Relational_algebra][Relational Algebra]] by making sure the
+schema of a database conforms to certain restrictions, like 1NF, let's us use
+tools like SQL to query our data with confidence that the answer will be
+correct.
+
+Correct normalization is also an important part of the ACID standard.
+
+*** ACID
+ACID is a set of standards for data in transactional/relational databases:
+
+- *A*: Atomicity. A transaction is all-or-nothing; if any part of a transaction
+  fails, the entire transaction fails, and no change is affected in the data. If
+  the transaction succeeds, we know it *all* succeeded.
+- C: Consistency. A transaction will transition a database from one valid state
+  to a new valid state, where "valid" is defined by a certain set of known
+  rules. This is a bounded consistency. The database cannot, for instance, stop
+  you from setting a customer's address to "12345 Butts Butts Butts", but it /can/
+  have a constraint against the address being empty.
+- *I*: Isolation. This property manages the effect of concurrent transactions on
+  the same data, and makes guarantees about the outcome of those
+  transactions. Most typically, the outcome of two concurrent transactions
+  should be identical to the same two transactions being applied in serial,
+  though this can sometimes be configured in the database.
+- D: Durability. Committed transactions are never lost. If the database crashes,
+  looses power, is cut off from the network -- every committed transaction is
+  safe.
+
+** Defining a database schema
+Let's consider our ~items~ table:
+
+| Item               |   ID | In Stock | Price | Updated On |
+|--------------------+------+----------+-------+------------|
+| Carpet, very large | 7899 |        0 |  2000 | 2016-03-22 |
+| Tea kettle, brass  |  214 |        0 |    58 | 2016-03-22 |
+| Monkey, Statue of  |  314 |        0 |   100 | 2016-03-22 |
+| Carpet, medium     | 1689 |        0 |  1000 | 2016-03-22 |
+| table              |   21 |        0 |   250 | 2016-03-22 |
+| Monkey, Statue of  |  315 |        0 |   100 | 2016-03-22 |
+
+We know the name of this entity: ~items~. Our next task is to describe the columns
+in each entity. This means knowing something of the /type/ of each column, and
+also the constraints we want the database to impose. We'll start by transposing
+the table, and removing everything but the column names:
+
+| Item       |
+| ID         |
+| In Stock   |
+| Price      |
+| Updated On |
+
+While we're at it, let's tidy up these names to something more idiomatic for a
+database:
+
+| Column Name     |
+|-----------------|
+| item_name       |
+| id              |
+| number_in_stock |
+| price           |
+| updated_on      |
+
+Great. Lets think about types.
+
+*** Types
+We already know something about the types of each thing, so let's notate that:
+
+| Column Name     | Type    |
+|-----------------+---------|
+| item_name       | String  |
+| id              | Integer |
+| number_in_stock | Integer |
+| price           | Float   |
+| updated_on      | Date    |
+
+Every database has its own types; I'll add the equivalent Postgres types here:
+
+| Column Name     | Type    | PG Type                 |
+|-----------------+---------+-------------------------|
+| item_name       | String  | ~varchar(100)~            |
+| id              | Integer | ~integer~                 |
+| number_in_stock | Integer | ~integer~                 |
+| price           | Float   | ~numeric(10, 2)~          |
+| updated_on      | Date    | ~timestamp with timezone~ |
+
+~varchar~, a shortening of "character varying", is what it sounds like -- a string
+field of bounded length. ~integer~ is a 32-bit signed integer, and is Postgres'
+standard for most whole numbers. ~numeric~ is a user-specified precision decimal
+number; here we specify it has ten total digits with two digits of
+precision. Lastly, ~timestamp~ -- which comprises both date and time; I've chosen
+to specify timezone, which is optional, but encouraged.
+
+In general, pick the smallest unit that will satisfy your needs. For instance:
+we choose a bounded ~varchar(100)~ for our ~items~, instead of the unbounded (and
+thus more expensive to store) ~text~. It's important to understand what your needs
+/are/, so you can avoid making an unnecessary  crusade of optimization you don't
+need. For instance ~integer~ takes 4 bytes of storage, while ~smallint~
+only takes two. So, does it matter that we picked ~integer~ for our ~items~ schema?
+Remember, our motivating hypothetical is a store that's /just/ grown big enough to
+need a database. It's unlikely such a store would have /so many/ items in stock
+that use of an ~integer~ would make a different. On the other hand, if you were to
+ever design a database schema for a business doing lots and /lots/ of retail on
+the internet, you'd want to think very carefully about the storage needs of
+whatever table stores purchase transactions -- that table might get huge, fast.
+
+Can you change schemas later? Why yes! How difficult this is to do is a function
+of a lot of factors that are hard to predict. How difficult is it to take "down
+time" -- shut down your service while you modify the database? How big is your
+data set? Are you well provisioned -- that is, you have plenty of extra
+resources around -- or under-provisioned? But: schemas are not set in stone. You
+don't have to get them right the first time /or else/.
+
+*** Properties and Constraints
+Relational databases give us a rich language in which to describe expectations
+about our data. Some of this relates to what we've been talking about -- which
+columns are keys? Other times, we describe constraints around our data. Can a
+given datum be missing? What default values can be used?
+
+To give us very slightly more to talk about, I'm going to first make two changes
+to our nascent schema. First: I'm going to change ~id~ to ~inventory_number~, and
+add ~id~ back in as an integer column the database will use to guarantee
+uniqueness. Second, I'm going to add an ~item_description~ field. Like so:
+
+| Column Name      | Type    | PG Type                 |
+|------------------+---------+-------------------------|
+| item_name        | String  | ~varchar(100)~            |
+| inventory_number | Integer | ~integer~                 |
+| id               | Integer | ~integer~                 |
+| number_in_stock  | Integer | ~integer~                 |
+| price            | Float   | ~numeric(10, 2)~          |
+| updated_on       | Date    | ~timestamp with timezone~ |
+| item_description | String  | ~text~                    |
+
+Given this, let's start with a prose description of this data:
+
+#+BEGIN_QUOTE
+Ever item is required to have a name and inventory number -- there's no sensible
+default value for either. The inventory number should be unique, but the item
+name doesn't have to be. The id of an item should be the next higher id after
+the last id added. If no number of units in stock is provided, default to zero;
+do not let this be negative. If no price is specified, default to zero dollars
+and zero cents; do not allow this to be negative. Item description can be
+omitted entirely. Updated on should always be the timestamp of the last time
+this row was modified. Because we're sure id will always be unique, it will be
+our primary key.
+#+END_QUOTE
+
+Now, in Postgres terms:
+
+| Column Name      | Type    | PG Type                 | Properties                            |
+|------------------+---------+-------------------------+---------------------------------------|
+| item_name        | String  | ~varchar(100)~            | ~NOT NULL~                              |
+| inventory_number | Integer | ~integer~                 | ~NOT NULL UNIQUE~                       |
+| id               | Integer | ~integer~                 | ~PRIMARY KEY SERIAL~                    |
+| number_in_stock  | Integer | ~integer~                 | ~DEFAULT 0 CHECK (number_in_stock > 0)~ |
+| price            | Float   | ~numeric(10, 2)~          | ~DEFAULT 0.00 CHECK (price > 0)~        |
+| updated_on       | Date    | ~timestamp with timezone~ | ~DEFAULT CURRENT_TIMESTAMP~             |
+| item_description | String  | ~text~                    |                                       |
+
+Et voila. It's a schema for a single database table! This could be converted in
+to a ~CREATE TABLE~ statement with very little work:
+
+#+BEGIN_SRC sql :exports code :eval never
+  CREATE TABLE items (
+         item_name varchar(100) NOT NULL,
+         inventory_number integer NOT NULL UNIQUE,
+         id integer PRIMARY KEY SERIAL,
+         number_in_stock integer DEFAULT 0 CHECK (number_in_stock > 0),
+         price numeric(10,2) DEFAULT 0.00 CHECK (price > 0),
+         updated_on timestamp with timezone DEFAULT CURRENT_TIMESTAMP,
+         item_description text
+  );
+#+END_SRC
+
+*** In Conclusion
+At this point, we're pretty much ready to make a database! Which we will do!
+Next week.
+
+I leave you with the completed schemas, for your reference:
+
+**** customers
+
+|----------------+-------------------------+-----------------------------------------|
+| Column Name    | PG Type                 | Properties                              |
+|----------------+-------------------------+-----------------------------------------|
+| id             | ~integer~                 | ~PRIMARY KEY SERIAL~                      |
+| name           | ~varchar(100)~            | ~NOT NULL~                                |
+| street_address | ~varchar(100)~            | ~NULL CHECK (zipcode IS NOT NULL)~        |
+| city           | ~varchar(100)~            | ~NULL CHECK (street_address IS NOT NULL)~ |
+| state          | ~varchar(2)~              | ~NULL CHECK (city IS NOT NULL)~           |
+| zipcode        | ~numeric(5)~              | ~NULL CHECK (state IS NOT NULL)~          |
+| phone_number   | ~numeric(10)~             | ~NOT NULL~                                |
+| updated_on     | ~timestamp with timezone~ | ~DEFAULT CURRENT_TIMESTAMP~               |
+|----------------+-------------------------+-----------------------------------------|
+
+This set of checks dictates that if one of ~street_address~, ~city~, ~state~, ~zipcode~
+are set, the other three must be set.
+
+**** items
+|------------------+---------+-------------------------+---------------------------------------|
+| Column Name      | Type    | PG Type                 | Properties                            |
+|------------------+---------+-------------------------+---------------------------------------|
+| item_name        | String  | ~varchar(100)~            | ~NOT NULL~                              |
+| inventory_number | Integer | ~integer~                 | ~NOT NULL UNIQUE~                       |
+| id               | Integer | ~integer~                 | ~PRIMARY KEY SERIAL~                    |
+| number_in_stock  | Integer | ~integer~                 | ~DEFAULT 0 CHECK (number_in_stock > 0)~ |
+| price            | Float   | ~numeric(10, 2)~          | ~DEFAULT 0.00 CHECK (price > 0)~        |
+| updated_on       | Date    | ~timestamp with timezone~ | ~DEFAULT CURRENT_TIMESTAMP~             |
+| item_description | String  | ~text~                    | ~NULL~                                  |
+|------------------+---------+-------------------------+---------------------------------------|
+
+**** purchases
+
+|-----------------+-----------------------------+---------------------------|
+| Column Name     | PG Type                     | Properties                |
+|-----------------+-----------------------------+---------------------------|
+| id              | ~integer~                     | ~PRIMARY KEY SERIAL~        |
+| customer_id     | ~integer~                     | ~REFERENCES customers (id)~ |
+| order_id        | ~integer~                     | ~REFERENCES orders (id)~    |
+| purchase_date   | ~timestamp with timezone~     | ~NOT NULL~                  |
+| updated_on      | ~timestamp with timezone~     | ~DEFAULT CURRENT_TIMESTAMP~ |
+| total           | ~numeric(10,2)~               | ~NOT NULL~                  |
+| delivery_method | ~enum('in-store', 'shipped')~ | ~NULL~                      |
+|-----------------+-----------------------------+---------------------------|
+
+**** orders
+
+|---------------+-------------------------+---------------------------|
+| Column Name   | PG Type                 | Properties                |
+|---------------+-------------------------+---------------------------|
+| order_id      | ~integer~                 | ~REFERENCES orders (id)~    |
+| item_id       | ~integer~                 | ~REFERENCES items (id)~     |
+| item_quantity | ~integer~                 | ~NOT NULL~                  |
+| ordered_on    | ~timestamp with timezone~ | ~DEFAULT CURRENT_TIMESTAMP~ |
+|---------------+-------------------------+---------------------------|
+
+* <2016-04-17 Sun> -- Database, Part Two: the Sequel
 ** Building a Database
 Okay, rad: we now have everything we need to build a database out of the parts
 on hand. Let's do this thing!
@@ -3049,8 +3362,9 @@ homebrew. Mostly, (Postgres.app simplifies starting up the database.)
 brew install postgresql
 #+END_SRC
 
-* <2016-04-17 Sun> -- Database, Part Two: the Sequel
+
 * <2016-04-24 Sun> -- Testing. Testing. Testing.
+
 * <2016-05-01 Sun> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
 ** What on Earth Even Is This
 ** You Should Totally Get Familiar With:
