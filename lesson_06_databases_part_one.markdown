@@ -111,7 +111,7 @@ Let's look at our first three columns. Each row in those three columns describes
 | Rowan Scott    | 3172 NE Hampstead Rd, New York, New York 12345 | 123 456-7899   |
 | Devon Grantham | 58 Prescott Place, Wichita, Kansas 54321       | (821) 954-2186 |
 | Van Rijn       | 805 SE Belmont, Portland, OR 97214             | 503.554.5108   |
-| Rowan Scott    | 4108 Telegraph Ave., Oakland, CA 94625         | 1234567899     |
+| Rowan Scott    | 3172 NE Hampstead Rd, New York, New York 12345 | 1234567899     |
 | Devon Grantham | 58 Prescott Place, Wichita, Kansas 54321       | (821) 954-2186 |
 
 In fact, they actually make *more* sense on their own. Now we can get rid of duplicate rows:
@@ -370,15 +370,15 @@ Given this, let's start with a prose description of this data:
 
 Now, in Postgres terms:
 
-| Column Name       | Type    | PG Type                   | Properties                              |
-|-------------------|---------|---------------------------|-----------------------------------------|
-| item\_name        | String  | `varchar(100)`            | `NOT NULL`                              |
-| inventory\_number | Integer | `integer`                 | `NOT NULL UNIQUE`                       |
-| id                | Integer | `integer`                 | `PRIMARY KEY SERIAL`                    |
-| number\_in\_stock | Integer | `integer`                 | `DEFAULT 0 CHECK (number_in_stock > 0)` |
-| price             | Float   | `numeric(10, 2)`          | `DEFAULT 0.00 CHECK (price > 0)`        |
-| updated\_on       | Date    | `timestamp with timezone` | `DEFAULT CURRENT_TIMESTAMP`             |
-| item\_description | String  | `text`                    |                                         |
+| Column Name       | Type    | PG Type                   | Properties                               |
+|-------------------|---------|---------------------------|------------------------------------------|
+| item\_name        | String  | `varchar(100)`            | `NOT NULL`                               |
+| inventory\_number | Integer | `integer`                 | `NOT NULL UNIQUE`                        |
+| id                | Integer | `integer`                 | `PRIMARY KEY SERIAL`                     |
+| number\_in\_stock | Integer | `integer`                 | `DEFAULT 0 CHECK (number_in_stock >= 0)` |
+| price             | Float   | `numeric(10, 2)`          | `DEFAULT 0.00 CHECK (price >= 0)`        |
+| updated\_on       | Date    | `timestamp with timezone` | `DEFAULT CURRENT_TIMESTAMP`              |
+| item\_description | String  | `text`                    | NULL                                     |
 
 Et voila. It's a schema for a single database table! This could be converted in to a `CREATE TABLE` statement with very little work:
 
@@ -439,6 +439,8 @@ This set of checks dictates that if one of `street_address`, `city`, `state`, `z
 | total            | `numeric(10,2)`               | `NOT NULL`                  |
 | delivery\_method | `enum('in-store', 'shipped')` | `NULL`                      |
 
+This schema uses the SQL `enumeration` type, which restricts the the value of the column to a specified set of values.
+
 #### orders
 
 | Column Name    | PG Type                   | Properties                  |
@@ -448,6 +450,34 @@ This set of checks dictates that if one of `street_address`, `city`, `state`, `z
 | item\_quantity | `integer`                 | `NOT NULL`                  |
 | ordered\_on    | `timestamp with timezone` | `DEFAULT CURRENT_TIMESTAMP` |
 
+### Exercise: make your own schema
+
+#### Classes
+
+| Course Name    | Course Number | Room       | Computers in Room? | Projector? | Maximum Occupancy | Student Name   | Student ID | Status           | Professor          | Department |
+|----------------|---------------|------------|--------------------|------------|-------------------|----------------|------------|------------------|--------------------|------------|
+| Humanities 110 | 110           | ETC 225    | Yes                | Yes        | 30                | Ross Donaldson | A123456    | Quadruple-Senior | Steven Wasserstrom | Religion   |
+| Humanities 110 | 110           | Elliot 138 | No                 | Yes        | 15                | Harmon Kardon  | B654321    | Freshman         | Nigel Nicholson    | Classics   |
+
+#### Game Events
+
+| Player | Character          | Tier | Hit Points | Class     | Level | XP    | Gold | Inventory                           | Action   | Action Target      | Action Effect |
+|--------|--------------------|------|------------|-----------|-------|-------|------|-------------------------------------|----------|--------------------|---------------|
+| Ross   | Bork the Barbarian | Free | 100        | Barbarian | 5     | 12391 | 0    | Club, Armor, Roast Chicken, Boots   | Attack   | Orc                | 12 damage     |
+| n/a    | Orc                | n/a  | 30         | n/a       | 3     | 500   | 10   | Sword, Orc Hat                      | Attacked | Bork the Barbarian | 12 damage     |
+| n/a    | Orc                | n/a  | 18         | n/a       | 3     | 500   | 10   | Sword, Orc Hat                      | Attack   | Bork the Barbarian | 8 damage      |
+| Bey    | Morrigan           | Paid | 5000       | Wizard    | 35    | 28549 | 3000 | Mega Wand, Platinum Single          | Buy      | Rad Hat            | 20 gold       |
+| Ross   | Bork the Barbarian | Free | 92         | Barbarian | 5     | 12391 | 0    | Club, Armor, Roast Chicken, Boots   | Attacked | Orc                | 8 damage      |
+| Bey    | Morrigan           | Paid | 5000       | Wizard    | 35    | 28549 | 2980 | Mega Wand, Platinum Single, Rad Hat | Receive  | Rad Hat            | -20 gold      |
+
+#### Library
+
+| Title                   | Author                                                   | Type     | Issue Date | In Print? | Publisher      | Total | Present | On-Loan To       | Due Date   | For Course | Location                                      |
+|-------------------------|----------------------------------------------------------|----------|------------|-----------|----------------|-------|---------|------------------|------------|------------|-----------------------------------------------|
+| The Wind in the Willows | Kenneth Grahame                                          | Book     | 1908       | Yes       | Methuen        | 5     | 3       | Ross Donaldson   | 2016-04-10 | n/a        | Reed Library Pollock Room (PR4726 .W5 1940b ) |
+| The Wind in the Willows | Kenneth Grahame                                          | Book     | 1908       | Yes       | Methuen        | 5     | 3       | Student McAlumni | 2016-05-10 | Lit 235    | Reed Library Pollock Room (PR4726 .W5 1940b ) |
+| Romeo and Juliette      | Sergey Prokofiev, Esa-Pekka Salonen, Berlin Philharmonic | Audio CD |            |           | Sony Classical | 1     | 1       |                  |            | Music 348  | Online Access                                 |
+
 Footnotes:
 ----------
 
@@ -456,7 +486,7 @@ Are there more normal forms? Why yes! But they rapidly become more and more diff
 
 Author: Ross Donaldson
 
-Created: 2016-04-09 Sat 18:07
+Created: 2016-04-10 Sun 14:19
 
 [Validate](http://validator.w3.org/check?uri=referer)
 
