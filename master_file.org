@@ -2906,7 +2906,7 @@ three columns make perfect sense on their own:
 | Rowan Scott    | 3172 NE Hampstead Rd, New York, New York 12345 | 123 456-7899   |
 | Devon Grantham | 58 Prescott Place, Wichita, Kansas 54321       | (821) 954-2186 |
 | Van Rijn       | 805 SE Belmont, Portland, OR 97214             | 503.554.5108   |
-| Rowan Scott    | 4108 Telegraph Ave., Oakland, CA 94625         | 1234567899     |
+| Rowan Scott    | 3172 NE Hampstead Rd, New York, New York 12345 | 1234567899     |
 | Devon Grantham | 58 Prescott Place, Wichita, Kansas 54321       | (821) 954-2186 |
 
 In fact, they actually make /more/ sense on their own. Now we can get rid of
@@ -3263,15 +3263,15 @@ our primary key.
 
 Now, in Postgres terms:
 
-| Column Name      | Type    | PG Type                 | Properties                            |
-|------------------+---------+-------------------------+---------------------------------------|
-| item_name        | String  | ~varchar(100)~            | ~NOT NULL~                              |
-| inventory_number | Integer | ~integer~                 | ~NOT NULL UNIQUE~                       |
-| id               | Integer | ~integer~                 | ~PRIMARY KEY SERIAL~                    |
-| number_in_stock  | Integer | ~integer~                 | ~DEFAULT 0 CHECK (number_in_stock > 0)~ |
-| price            | Float   | ~numeric(10, 2)~          | ~DEFAULT 0.00 CHECK (price > 0)~        |
-| updated_on       | Date    | ~timestamp with timezone~ | ~DEFAULT CURRENT_TIMESTAMP~             |
-| item_description | String  | ~text~                    |                                       |
+| Column Name      | Type    | PG Type                 | Properties                             |
+|------------------+---------+-------------------------+----------------------------------------|
+| item_name        | String  | ~varchar(100)~            | ~NOT NULL~                               |
+| inventory_number | Integer | ~integer~                 | ~NOT NULL UNIQUE~                        |
+| id               | Integer | ~integer~                 | ~PRIMARY KEY SERIAL~                     |
+| number_in_stock  | Integer | ~integer~                 | ~DEFAULT 0 CHECK (number_in_stock >= 0)~ |
+| price            | Float   | ~numeric(10, 2)~          | ~DEFAULT 0.00 CHECK (price >= 0)~        |
+| updated_on       | Date    | ~timestamp with timezone~ | ~DEFAULT CURRENT_TIMESTAMP~              |
+| item_description | String  | ~text~                    | NULL                                   |
 
 Et voila. It's a schema for a single database table! This could be converted in
 to a ~CREATE TABLE~ statement with very little work:
