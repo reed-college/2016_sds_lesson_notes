@@ -3516,6 +3516,7 @@ and people's preferences for different foods, like so:
 | attitude    | ENUM('love', 'hate', 'meh') | NOT NULL                       |
 |-------------+-----------------------------+--------------------------------|
 
+
 *** A couple quick notes about ~psql~
 ~psql~ is the Postgres command-line tool. Where calling ~python~ from the command
 line gets you a REPL (read-eval-print loop), ~psql~ gets you a full-blown
@@ -3647,9 +3648,9 @@ table:
 own. Everything else here is pretty bog-standard (and a lot less daunting than
 the vast panoply of options Postgres supports). Here's the next two statements:
 
-***** foods
+***** food
 #+BEGIN_SRC sql
-  CREATE TABLE foods (
+  CREATE TABLE food (
          id SERIAL PRIMARY KEY,
          name VARCHAR(50) NOT NULL,
          kind VARCHAR(10) NULL,
@@ -3669,11 +3670,11 @@ need a separate ~CREATE TYPE~ statement:
     CREATE TABLE preferences (
            id SERIAL PRIMARY KEY,
            person_id INTEGER NOT NULL REFERENCES people(id),
-           food_id INTEGER NOT NULL REFERENCES foods(id),
+           food_id INTEGER NOT NULL REFERENCES food(id),
            attitude attitudes NOT NULL,
            created_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
            updated_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-    )
+    );
 #+END_SRC
 
 #+RESULTS:
@@ -3688,7 +3689,8 @@ Here are some people:
   INSERT INTO people (first_name, last_name)
   VALUES ('Captain', 'Vegetable')
          , ('Samus', 'Aran')
-         , ('Bork', 'the Barbarian');
+         , ('Bork', 'the Barbarian')
+  ;
 #+END_SRC
 
 #+RESULTS:
@@ -3696,12 +3698,13 @@ Here are some people:
 
 And some foods:
 #+BEGIN_SRC sql
-  INSERT INTO foods (name, kind, description)
+  INSERT INTO food (name, kind, description)
   VALUES ('carrot', 'vegetable', 'how much beta carotene can be in one food IT IS SO MUCH')
          , ('celery', 'vegetable', 'eating crunchy vegetables is good for me')
          , ('quinoia', NULL, 'are we actually sure what this is?')
          , ('roast beef', 'meat', NULL)
-         , ('tuna sandwich', 'sandwich', 'made with apples and sourdough bread');
+         , ('tuna sandwich', 'sandwich', 'made with apples and sourdough bread')
+  ;
 #+END_SRC
 
 #+RESULTS:
@@ -3717,7 +3720,8 @@ And some preferences:
          , (1, 4, 'hate')
          , (2, 1, 'hate')
          , (2, 5, 'love')
-         , (3, 4, 'love');
+         , (3, 4, 'love')
+  ;
 #+END_SRC
 
 #+RESULTS:
@@ -3766,7 +3770,7 @@ statements in the ~WHERE~ clause.
 So for instance, what are the names of all the vegetables in the ~foods~ table?
 #+BEGIN_SRC sql
 SELECT name
-FROM foods
+FROM food
 WHERE kind = 'vegetable';
 #+END_SRC
 
@@ -3800,7 +3804,7 @@ we have?
 
 #+BEGIN_SRC sql
 SELECT kind, COUNT(*)
-FROM foods
+FROM food
 GROUP BY kind
 #+END_SRC
 
@@ -3869,7 +3873,7 @@ Now we need to be more specific about how we do our join. There are three basic
 kinds of joins:
 - Inner
 - Right/Left
-- Outer (sometimes called a cross or Cartesian join)
+- Outer
 
 Let's see each of these with our two tables:
 
@@ -3989,7 +3993,7 @@ ON table_one_alias.column = table_two_alias.column
          , COUNT(DISTINCT foods.id) AS liked_foods
   FROM people AS peeps
   LEFT JOIN preferences AS prefs ON peeps.id = prefs.person_id
-  LEFT JOIN foods ON foods.id = prefs.food_id
+  LEFT JOIN food ON foods.id = prefs.food_id
   WHERE peeps.first_name = 'Captain'
         AND peeps.last_name = 'Vegetable'
         AND prefs.attitude = 'love'
@@ -4012,7 +4016,7 @@ Figure out how to answer these questions using SQL:
 2. Find the food that doesn't have a description.
 3. Who likes the food with "beta carotene" in the description?
 
-** ORMs
+* ORMs
 By now, I hope you've gotten a sense for how SQL operates -- the kinds of things
 it can do, how it will help us work. You may also have a hunch that SQL isn't
 going to be the easiest thing to use directly from, say, Python server code, and
@@ -4030,7 +4034,7 @@ going to do in the most vanilla way possible. You can [[https://realpython.com/b
 fancy integrating those two things, if you'd like, or you can just do this the,
 y'know, vanilla way.
 
-*** Why ORM?
+** Why ORM?
 ORMs get us a couple different things:
 
 - *Idiomatic*: SQL is terrific, but it's not idiomatic to anything but itself. An
@@ -4045,7 +4049,7 @@ ORMs get us a couple different things:
   databases if you're using an ORM than if you have to manually update all your
   SQL for portability.)
 
-*** Example Code
+** Example Code
 Today, we'll be mostly working through changes to our friend [[https://github.com/gastove/http-demo][http-demo]], so clone
 that thinger and let's get motoring there.
 

@@ -205,9 +205,9 @@ CREATE TABLE people (
 
 `SERIAL` is effectively the type of `id`, so Postgres lets us use it on its own. Everything else here is pretty bog-standard (and a lot less daunting than the vast panoply of options Postgres supports). Here's the next two statements:
 
--   <span id="orgheadline14"></span>foods
+-   <span id="orgheadline14"></span>food
     ``` src
-    CREATE TABLE foods (
+    CREATE TABLE food (
            id SERIAL PRIMARY KEY,
            name VARCHAR(50) NOT NULL,
            kind VARCHAR(10) NULL,
@@ -224,11 +224,11 @@ CREATE TABLE people (
     CREATE TABLE preferences (
            id SERIAL PRIMARY KEY,
            person_id INTEGER NOT NULL REFERENCES people(id),
-           food_id INTEGER NOT NULL REFERENCES foods(id),
+           food_id INTEGER NOT NULL REFERENCES food(id),
            attitude attitudes NOT NULL,
            created_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
            updated_on TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-    )
+    );
     ```
 
 #### Loading some test data
@@ -241,18 +241,20 @@ Here are some people:
 INSERT INTO people (first_name, last_name)
 VALUES ('Captain', 'Vegetable')
        , ('Samus', 'Aran')
-       , ('Bork', 'the Barbarian');
+       , ('Bork', 'the Barbarian')
+;
 ```
 
 And some foods:
 
 ``` src
-INSERT INTO foods (name, kind, description)
+INSERT INTO food (name, kind, description)
 VALUES ('carrot', 'vegetable', 'how much beta carotene can be in one food IT IS SO MUCH')
        , ('celery', 'vegetable', 'eating crunchy vegetables is good for me')
        , ('quinoia', NULL, 'are we actually sure what this is?')
        , ('roast beef', 'meat', NULL)
-       , ('tuna sandwich', 'sandwich', 'made with apples and sourdough bread');
+       , ('tuna sandwich', 'sandwich', 'made with apples and sourdough bread')
+;
 ```
 
 And some preferences:
@@ -265,7 +267,8 @@ VALUES (1, 1, 'love')
        , (1, 4, 'hate')
        , (2, 1, 'hate')
        , (2, 5, 'love')
-       , (3, 4, 'love');
+       , (3, 4, 'love')
+;
 ```
 
 Some things to notice about all of this:
@@ -304,7 +307,7 @@ So for instance, what are the names of all the vegetables in the `foods` table?
 
 ``` src
 SELECT name
-FROM foods
+FROM food
 WHERE kind = 'vegetable';
 ```
 
@@ -321,7 +324,7 @@ SQL also supports a variety of different kinds of aggregations, by calling a fun
 
 ``` src
 SELECT kind, COUNT(*)
-FROM foods
+FROM food
 GROUP BY kind
 ```
 
@@ -367,7 +370,7 @@ GROUP BY kind
 
     -   Inner
     -   Right/Left
-    -   Outer (sometimes called a cross or Cartesian join)
+    -   Outer
 
     Let's see each of these with our two tables:
 
@@ -461,7 +464,7 @@ GROUP BY kind
            , COUNT(DISTINCT foods.id) AS liked_foods
     FROM people AS peeps
     LEFT JOIN preferences AS prefs ON peeps.id = prefs.person_id
-    LEFT JOIN foods ON foods.id = prefs.food_id
+    LEFT JOIN food ON foods.id = prefs.food_id
     WHERE peeps.first_name = 'Captain'
           AND peeps.last_name = 'Vegetable'
           AND prefs.attitude = 'love'
@@ -478,25 +481,6 @@ Figure out how to answer these questions using SQL:
 1.  Which food is the most liked?
 2.  Find the food that doesn't have a description.
 3.  Who likes the food with "beta carotene" in the description?
-
-ORMs
-----
-
-By now, I hope you've gotten a sense for how SQL operates – the kinds of things it can do, how it will help us work. You may also have a hunch that SQL isn't going to be the easiest thing to use directly from, say, Python server code, and you're right. When we write applications that talk to databases, we want to spend our time creating application logic, not hand-writing SQL statements. This isn't to say hand-written SQL doesn't have it's place. It's invaluable for debugging and analysis – questions like "this seems messy, what's wrong with it" or "how common is this edge case" or "how many Foo do we get per day". It's important to be able to reach in to your database and fiddle the bits. But it's now how we'll write our applications.
-
-**Note**: there are a lot of ways to wire an ORM and a web app together. I'm going to do a demonstration using Flask and a Python ORM called SQLAlchemy, which I am going to do in the most vanilla way possible. You can [read more about](https://realpython.com/blog/python/flask-by-example-part-1-project-setup/) getting fancy integrating those two things, if you'd like, or you can just do this the, y'know, vanilla way.
-
-### Why ORM?
-
-ORMs get us a couple different things:
-
--   **Idiomatic**: SQL is terrific, but it's not idiomatic to anything but itself. An ORM lets you write clean, idiomatic code in the language of your application.
--   **DRY**: Interacting with databases is such a common task that it makes very little sense to implement it yourself, when there are first-class libraries to do it for you.
--   **Portable**: The ORM can handle SQL dialect changes for you, allowing your code to become far more "portable" across systems. (That is, if you write your code against a sqlite database, but then switch to Postgres, but then someone else wants to run you code backed by MySQL, it will be vastly easier to change databases if you're using an ORM than if you have to manually update all your SQL for portability.)
-
-### Example Code
-
-Today, we'll be mostly working through changes to our friend [http-demo](https://github.com/gastove/http-demo), so clone that thinger and let's get motoring there.
 
 Footnotes:
 ----------
@@ -517,7 +501,7 @@ postgres -D /usr/local/var/postgres
 
 Author: Ross Donaldson
 
-Created: 2016-04-17 Sun 13:36
+Created: 2016-04-17 Sun 14:41
 
 [Validate](http://validator.w3.org/check?uri=referer)
 
