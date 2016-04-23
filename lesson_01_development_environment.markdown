@@ -164,6 +164,10 @@ As you type commands in to your terminal, your terminal will remember some
 number of the last commands you used. Press up arrow to go through your old
 commands. (You can go back down with down arrow.)
 
+### Ctrl-r
+
+Speaking of previous commands that you've used, you can also search through those remembered commands with Ctrl-r. Just hit Ctrl-r, and start typing some part of the command you are looking for. Once you have a few characters typed and start seeing good results, hitting Ctrl-r again will take you to the previous matching command you typed.
+
 ### Tab
 
 Tab completion is a beautiful thing. It can be used, most notably, in a lot of
