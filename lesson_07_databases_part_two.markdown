@@ -268,6 +268,7 @@ VALUES (1, 1, 'love')
        , (2, 1, 'hate')
        , (2, 5, 'love')
        , (3, 4, 'love')
+       , (3, 1, 'love')
 ;
 ```
 
@@ -501,7 +502,7 @@ postgres -D /usr/local/var/postgres
 
 Author: Ross Donaldson
 
-Created: 2016-04-17 Sun 14:41
+Created: 2016-04-17 Sun 14:48
 
 [Validate](http://validator.w3.org/check?uri=referer)
 
