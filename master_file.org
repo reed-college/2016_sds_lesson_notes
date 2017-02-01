@@ -1,11 +1,64 @@
  #+PROPERTY: header-args :exports both :results verbatim
 
-* <2016-02-21 Sun> -- Development Environment
+* <2017-01-31 Tue> -- Development Environment
 :PROPERTIES:
 :header-args: :dir ~/
+:EXPORT_FILE_NAME: lesson_01_development_environment.html
 :END:
 
+** Foundational Idea: Plain Text
+You've probably used Microsoft Word. You've probably used it to do a thing like
+this:
+
+1. Open a new Document.
+2. Write five works.
+3. Make one of them bold.
+4. Change the font size.
+5. Change the font entirely.
+6. Save it.
+7. Email it to someone else.
+
+First point of clarification: when you save the document, it becomes a /file/, a
+thing that exists on the hard drive of your computer. We could call it a
+document, because we know it is; now we can call it a "file" too. A file is a
+much broader term; nearly anything stored on your computer is a file, or is made
+of files. (The primary exception are folders, which collect a set of files and
+other folders, making a natural hierarchy.) Point is: I'm going to say
+"document" and "file" a little interchangeably for a moment here.
+
+When that document arrives in the inbox of the Other Person, and they open it in
+Microsoft Word, you will have a very reasonable expectation that it will be "the
+same". Which is to say, not /only/ will the words be the same, but the font will
+be the same, and the correct word will be typeset in a bold face.
+
+This sort of file is called a /rich text/ document. Which means: the document
+encodes both data ("what words are in the document") and metadata about those
+words ("this one is bold; the font is Impact") and saves them in the same file.
+You need a particular kind of program to correctly interact with this file;
+you'd have a gross experience opening a Word document in Sublime Text.
+
+This markdown document, on the other hand, is a /plain text/ document. It *only*
+contains words. What font will it open in? A font provided by the program that
+opens it. How big will the text be? You can't control that either. A plain text
+format conveys *only* the data -- the words -- and no metadata.
+
+This distinction is important for a variety of reasons. The most important of
+them is this: unlike Word Documents, where the program used to write them is
+prescribed by the format, plain text documents can be opened and edited by a
+dazzling array of programs. Plain text can also be manipulated by an incredibly
+rich set of tools. Today, we're going to explore some of these.
+
 ** Text Editors vs. IDEs
+
+"Text editor" is the name for the broad category of tools intended for working
+with plain text. There are a *lot* of IDEs, and many of them don't bear fooling
+with. Windows, for example, comes with a program called Notepad. If Text Editors
+are cars, Notepad is a golf cart with half a battery left. It'll move you a
+short distance, sure, and then you'll wish you'd done something else.
+
+An Integrated Development Environment -- IDE -- ties a text editor together with
+Some Number of Other Tools. Which tools, and how they are tied together, varies
+widely. And yes, the line between an editor and an IDE can get fuzzy.
 
 Loose guidelines:
 1. All code is text, so all code can be read in a text editor. Find a /real/, code
@@ -41,6 +94,13 @@ Really nice to have:
 - Pretty simple, but that's very good news. (They're *just* text editors.)
 - Pretty simple, and maybe you want a little more out of your tools.
 
+**** Nano
+- Look, this is technically a text editor
+- But it's a little like the Notepad of unix
+
+Nano is a wonderful thing to know is there in a context where you might
+otherwise have to use Vim, assuming you do not presently know how to use Vim.
+
 **** Emacs
 - Type words, get words. (Key chord-driven commands.)
 - ...but also it's backed by a lisp! Maybe you think that's great? Maybe it's
@@ -49,6 +109,7 @@ Really nice to have:
 - ...and an IDE!
 - ...and maybe also an operating system?
 - The gold standard in customizabile and extensible editors.
+- The gold standard in truly idiosyncratic user experiences.
 
 **** Vim
 - Type words, get lost
@@ -107,7 +168,7 @@ pwd
 Change which directory you're viewing using the ~cd~ command:
 
 #+BEGIN_SRC sh
-cd /tmp
+cd /tmp/
 pwd
 #+END_SRC
 
@@ -366,10 +427,16 @@ brew install git
 sudo brew install git # <- DO NOT DO THIS
 #+END_SRC
 
-** Regular Expressions
-I'm going to wing this if we have time.
+** Homework
+1. Accept github invite!
+2. Slack all set up and ready to go!
+3. Read Blabs' [[https://github.com/reed-college/blabs-config][configuration file]]; think about gifs or commands to add next week.
+4. Play with text editors! Figure out how to install a linter. Learn how to jump
+   forward/backaward up/down by word/sentence/paragraph. Learn how to jump from
+   an opening symbol, like {, to it's matching close, }.
+5. Start thinking about users you care about! Who would you want to build for?
 
-* <2016-02-28 Sun> -- OMGWTFDVCS (Git, et al)
+* <2017-02-07 Tue> -- OMGWTFDVCS (Git, et al)
 
 ** Cleanup                                                        :noexport:
 #+BEGIN_SRC sh
@@ -1459,7 +1526,7 @@ cat list.txt
 
 Voila.
 
-* <2016-03-06 Sun> -- Doing Computer: Starting to Pull this All Together
+* <2017-02-14 Tue> -- Doing Computer: Starting to Pull this All Together
 
 Okay: we know how to work a terminal. We know how to clone a git repo. Let's
 start pulling the pieces together. We'll start with some software development
@@ -2049,7 +2116,7 @@ cat requirements.txt
 : wheel==0.29.0
 
 Perfect.
-* <2016-03-13 Sun> -- Text and SSH Keys
+* <2017-02-21 Tue> -- Text and SSH Keys
 
 ** First, a couple points
 *** Text versus Everything Else
@@ -2248,7 +2315,7 @@ noted, just the way Github is set up; git URIs very often have a form more
 like, for instance, those at my work:
 ~ssh://git@atlassian.prod.urbanairship.com:222/reports/hubble.git~.
 
-* <2016-04-03 Sun> -- Web Applications: What do?
+* <2017-02-28 Tue> -- Web Applications: What do?
 
 #+name: postproc-rm-ctrlm
 #+BEGIN_SRC python :var to_clean='default' :results output :exports results
@@ -2751,7 +2818,7 @@ which the JS then turns in to HTML.
 
 As you might apprehend, this can get complex in a hurry.
 
-* <2016-04-10 Sun> -- Welcome to Databases
+* <2017-03-07 Tue> -- Welcome to Databases
 Okay, this is a topic I love. Databases! Just say it with me. /Databases/. So
 good. Day-tuh-bace. /Yes/.
 
@@ -3384,7 +3451,7 @@ column to a specified set of values.
 | Romeo and Juliette      | Sergey Prokofiev, Esa-Pekka Salonen, Berlin Philharmonic | Audio CD |            |           | Sony Classical |     1 |       1 |                  |            | Music 348  | Online Access                                 |
 |-------------------------+----------------------------------------------------------+----------+------------+-----------+----------------+-------+---------+------------------+------------+------------+-----------------------------------------------|
 
-* <2016-04-17 Sun> -- Database, Part Two: the Sequel
+* <2017-03-21 Tue> -- Database, Part Two: the Sequel
 #+BEGIN_SRC sh :exports none
 dropdb db_lesson_sql
 dropdb db_lesson_orm
@@ -3721,6 +3788,7 @@ And some preferences:
          , (2, 1, 'hate')
          , (2, 5, 'love')
          , (3, 4, 'love')
+         , (3, 1, 'love')
   ;
 #+END_SRC
 
@@ -4016,7 +4084,7 @@ Figure out how to answer these questions using SQL:
 2. Find the food that doesn't have a description.
 3. Who likes the food with "beta carotene" in the description?
 
-* ORMs
+* <2017-03-28 Tue> -- ORMs
 By now, I hope you've gotten a sense for how SQL operates -- the kinds of things
 it can do, how it will help us work. You may also have a hunch that SQL isn't
 going to be the easiest thing to use directly from, say, Python server code, and
@@ -4055,9 +4123,9 @@ that thinger and let's get motoring there.
 
 
 
-* <2016-04-24 Sun> -- Testing. Testing. Testing.
+* <2017-04-04 Tue> -- Testing. Testing. Testing.
 
-* <2016-05-01 Sun> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
+* <2017-04-11 Tue> -- BASH BASH BASH: The Terminal, the Shell, and a Thousand Little Programs
 ** What on Earth Even Is This
 ** You Should Totally Get Familiar With:
 *** ~ls~
