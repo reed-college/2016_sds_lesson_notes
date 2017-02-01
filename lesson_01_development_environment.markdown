@@ -143,6 +143,14 @@ Ctrl-c is the keyboard interrupt command – if you start something running and 
 
 As you type commands in to your terminal, your terminal will remember some number of the last commands you used. Press up arrow to go through your old commands. (You can go back down with down arrow.)
 
+#### Ctrl-r
+
+Speaking of previous commands that you've used, you can also search through
+those remembered commands with Ctrl-r. Just hit Ctrl-r, and start typing some
+part of the command you are looking for. Once you have a few characters typed
+and start seeing good results, hitting Ctrl-r again will take you to the
+previous matching command you typed. You can cancel at any time with Ctrl-g.
+
 #### Tab
 
 Tab completion is a beautiful thing. It can be used, most notably, in a lot of text editors and every Linux terminal. Tab complete can be an excellent way to see what completions are available, avoid typos, and become **much** faster at using your computer.
