@@ -39,19 +39,28 @@ A "git repository" is actually just a special kind of directory at the root of a
 
 ``` src
 ls -la
+              
 ```
 
 ``` example
-total 488
-drwxr-xr-x  10 rossdonaldson  staff    340 Feb 28 17:18 .
-drwxr-xr-x   7 rossdonaldson  staff    238 Feb 21 12:49 ..
-drwxr-xr-x  15 rossdonaldson  staff    510 Feb 28 17:18 .git
--rw-r--r--   1 rossdonaldson  staff     25 Feb 28 14:58 .gitignore
--rw-r--r--   1 rossdonaldson  staff    154 Feb 21 12:49 README.markdown
--rw-r--r--   1 rossdonaldson  staff  16693 Feb 21 12:49 lesson_01_development_environment.markdown
--rw-r--r--   1 rossdonaldson  staff  55596 Feb 28 17:18 lesson_02_git.markdown
--rw-r--r--   1 rossdonaldson  staff  78599 Feb 28 17:18 master_file.html
--rw-r--r--   1 rossdonaldson  staff  45387 Feb 28 17:18 master_file.org
+              total 984
+              drwxr-xr-x  16 rossdonaldson  staff     544 Feb  8 12:21 .
+              drwxr-xr-x  12 rossdonaldson  staff     408 Jan 31 15:16 ..
+              drwxr-xr-x  14 rossdonaldson  staff     476 Feb  8 12:20 .git
+              -rw-r--r--   1 rossdonaldson  staff      33 Jan 31 18:58 .gitignore
+              -rw-r--r--   1 rossdonaldson  staff     154 Jan 24 14:40 README.markdown
+              -rw-r--r--   1 rossdonaldson  staff   35290 Jan 31 18:47 lesson_01_development_environment.html
+              -rw-r--r--@  1 rossdonaldson  staff   14177 Jan 31 19:03 lesson_01_development_environment.markdown
+              -rw-r--r--   1 rossdonaldson  staff   69268 Feb  7 15:46 lesson_02_git.html
+              -rw-r--r--   1 rossdonaldson  staff   36656 Feb  7 15:47 lesson_02_git.markdown
+              -rw-r--r--   1 rossdonaldson  staff   19757 Jan 24 14:40 lesson_03_beginning_development.markdown
+              -rw-r--r--   1 rossdonaldson  staff    9740 Jan 24 14:40 lesson_04_ssh_plain_text.markdown
+              -rw-r--r--   1 rossdonaldson  staff   43493 Jan 24 14:40 lesson_05_http_and_html.markdown
+              -rw-r--r--   1 rossdonaldson  staff   36247 Jan 24 14:40 lesson_06_databases_part_one.markdown
+              -rw-r--r--   1 rossdonaldson  staff   22496 Jan 30 19:09 lesson_07_databases_part_two.markdown
+              -rw-r--r--   1 rossdonaldson  staff  189982 Feb  8 12:21 master_file.org
+              -rwxr-xr-x   1 rossdonaldson  staff     119 Jan 31 18:55 pandoc.sh
+            
 ```
 
 (Note that git's folder is named with the leading-dot hidden folder syntax, so you have to use the `la` flags to `ls` in order to see it.)
@@ -71,10 +80,11 @@ Your `.gitconfig` can contain all manner of things: git command aliases, behavio
 
 ``` src
 [user]
-    name = Ross Donaldson
-    email = gastove@gmail.com
-[push]
-    default = simple
+                  name = Ross Donaldson
+                  email = gastove@gmail.com
+                  [push]
+                  default = simple
+                
 ```
 
 Now git knows who I am, what my email address is, and that I want to use the "simple" push strategy.
@@ -85,47 +95,51 @@ The `.gitignore` is a crucially important part of git: it controls a set of thin
 
 ``` src
 mkdir -p /tmp/demo && cd /tmp/demo && git init
-echo 'here is some stuff you need to know' > knowledge.txt
-echo 'the top secret code is BANANAPHONE. Sure hope nobody ever adds this file to a public git repo' > top_secret.txt
-git status
+                  echo 'here is some stuff you need to know' > knowledge.txt
+                  echo 'the top secret code is BANANAPHONE. Sure hope nobody ever adds this file to a public git repo' > top_secret.txt
+                  git status
+                
 ```
 
 ``` example
-Initialized empty Git repository in /private/tmp/demo/.git/
-On branch master
+                Initialized empty Git repository in /private/tmp/demo/.git/
+                On branch master
 
-Initial commit
+                Initial commit
 
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
+                Untracked files:
+                (use "git add <file>..." to include in what will be committed)
 
-    knowledge.txt
-    top_secret.txt
+                knowledge.txt
+                top_secret.txt
 
-nothing added to commit but untracked files present (use "git add" to track)
+                nothing added to commit but untracked files present (use "git add" to track)
+              
 ```
 
-`top_secret.txt` is untracked, which is fine, but error prone. For instance: `git commit -am <message>` will definitely `git add` `top_secret.txt` – which is not what we want.
+`top_secret.txt` is untracked, which is fine, but error prone. For instance: `git                   commit -am <message>` will definitely `git add` `top_secret.txt` – which is not what we want.
 
 Observe:
 
 ``` src
 echo 'top_secret.txt' > .gitignore
-git status
+                  git status
+                
 ```
 
 ``` example
-On branch master
+                On branch master
 
-Initial commit
+                Initial commit
 
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
+                Untracked files:
+                (use "git add <file>..." to include in what will be committed)
 
-    .gitignore
-    knowledge.txt
+                .gitignore
+                knowledge.txt
 
-nothing added to commit but untracked files present (use "git add" to track)
+                nothing added to commit but untracked files present (use "git add" to track)
+              
 ```
 
 Now the `.gitignore` exists, but `top_secret.txt` has vanished from git entirely. *Perfect*.
@@ -187,99 +201,121 @@ We'll talk more about the commands very soon; for now, let's just see what this 
 
 ``` src
 mkdir -p /tmp/branch-demo && cd /tmp/branch-demo && git init # Make a new git repo
-echo "1. Pears" > groceries.txt                              # Add an item to a grocery list
-git add groceries.txt                                        # Tell git to track groceries.txt
-git commit -am "Add pears to list"                           # Commit groceries.txt
-git status
+                  echo "1. Pears" > groceries.txt                              # Add an item to a grocery list
+                  git add groceries.txt                                        # Tell git to track groceries.txt
+                  git commit -am "Add pears to list"                           # Commit groceries.txt
+                  git status
+                
 ```
 
 ``` example
-Initialized empty Git repository in /private/tmp/branch-demo/.git/
-[master (root-commit) b253537] Add pears to list
- 1 file changed, 1 insertion(+)
- create mode 100644 groceries.txt
-On branch master
-nothing to commit, working directory clean
+                Initialized empty Git repository in /private/tmp/branch-demo/.git/
+                On branch master
+
+                Initial commit
+
+                Changes to be committed:
+                (use "git rm --cached <file>..." to unstage)
+
+                new file:   groceries.txt
+              
 ```
 
 "On branch master; nothing to commit, working directory clean." `groceries.txt` looks like this:
 
 ``` src
 cat groceries.txt
+                
 ```
 
 ``` example
-1. Pears
+                1. Pears
+              
 ```
 
 But now:
 
 ``` src
 git checkout -b new_branch
-echo "2. tofu" >> groceries.txt
-git commit -am "Add tofu to list"
-git status
+                  echo "2. tofu" >> groceries.txt
+                  git commit -am "Add tofu to list"
+                  git status
+                
 ```
 
 ``` example
-[new_branch 03df594] Add tofu to list
- 1 file changed, 1 insertion(+)
-On branch new_branch
-nothing to commit, working directory clean
+                On branch new_branch
+
+                Initial commit
+
+                Changes to be committed:
+                (use "git rm --cached <file>..." to unstage)
+
+                new file:   groceries.txt
+
+                Changes not staged for commit:
+                (use "git add <file>..." to update what will be committed)
+                (use "git checkout -- <file>..." to discard changes in working directory)
+
+                modified:   groceries.txt
+              
 ```
 
 `groceries.txt` looks like this now:
 
 ``` src
 cat groceries.txt
+                
 ```
 
 ``` example
-1. Pears
-2. tofu
+                1. Pears
+                2. tofu
+              
 ```
 
 But now:
 
 ``` src
 git checkout master
-cat groceries.txt
+                  cat groceries.txt
+                
 ```
 
 ``` example
-1. Pears
+                1. Pears
+                2. tofu
+              
 ```
 
 We checkout master… and we're back to the old version. Git has re-written `groceries.txt` to match the last commit on the master branch. If we go back to `new_branch`, our changes are intact:
 
 ``` src
 git checkout new_branch
-cat groceries.txt
+                  cat groceries.txt
+                
 ```
 
 ``` example
-1. Pears
-2. tofu
+                1. Pears
+                2. tofu
+              
 ```
 
 We can combine the two histories through *merging*:
 
 ``` src
 git checkout master   # We check out the branch we want changes to come *in* to
-git merge new_branch  # "Bring the changes from new_branch" in to master
-git commit -m "Merging new_branch in to master"
-cat groceries.txt
+                  git merge new_branch  # "Bring the changes from new_branch" in to master
+                  git commit -m "Merging new_branch in to master"
+                  cat groceries.txt
+                
 ```
 
 ``` example
-Updating b253537..03df594
-Fast-forward
- groceries.txt | 1 +
- 1 file changed, 1 insertion(+)
-On branch master
-nothing to commit, working directory clean
-1. Pears
-2. tofu
+                1. Pears
+                2. tofu
+              
 ```
 
 Shazam.
@@ -292,34 +328,36 @@ Any repo can be cloned. For instance, using our repo from the previous example:
 
 ``` src
 cd /tmp
-git clone ./branch-demo cloning-demo
-cd cloning-demo
-git status
+                  git clone ./branch-demo cloning-demo
+                  cd cloning-demo
+                  git status
+                
 ```
 
 ``` example
-On branch master
-Your branch is up-to-date with 'origin/master'.
-nothing to commit, working directory clean
+                On branch master
+
+                Initial commit
+
+                nothing to commit (create/copy files and use "git add" to track)
+              
 ```
 
 We now have a complete second copy to `branch_demo` called `cloning_demo`. It has its very own copy of `groceries.txt`:
 
 ``` src
 pwd
+                
 ```
 
 ``` example
-/private/tmp/cloning-demo
+                /tmp/cloning-demo
+              
 ```
 
 ``` src
 cat groceries.txt
-```
-
-``` example
-1. Pears
-2. tofu
+                
 ```
 
 The important thing about cloning is that it can create an exact copy of *any git repo*, whether it's on your local file system or exposed via a transport protocol like HTTPS or SSH. This leads us directly in to the notion of "remotes".
@@ -334,38 +372,21 @@ First: a remote is a source and destination for commits, allowing two developers
 
 ``` src
 cd /tmp/branch-demo/
-echo "3. Gargantua" >> groceries.txt
-git commit -am "Add Gargantua to groceries.txt"
-```
-
-``` example
-[master 371f92c] Add Gargantua to groceries.txt
- 1 file changed, 1 insertion(+)
+                  echo "3. Gargantua" >> groceries.txt
+                  git commit -am "Add Gargantua to groceries.txt"
+                
 ```
 
 ``` src
 cd /tmp/cloning-demo
-cat groceries.txt
-```
-
-``` example
-1. Pears
-2. tofu
+                  cat groceries.txt
+                
 ```
 
 ``` src
 git pull origin master
-cat groceries.txt
-```
-
-``` example
-Updating 03df594..371f92c
-Fast-forward
- groceries.txt | 1 +
- 1 file changed, 1 insertion(+)
-1. Pears
-2. tofu
-3. Gargantua
+                  cat groceries.txt
+                
 ```
 
 By using `git pull`, our checkout now has the changes we made in our remote.
@@ -382,6 +403,26 @@ Remember that we were talking about the First important ramification of remotes?
 
 The last thing to make sure we all know is that a branch in your local checkout can be configured to match a branch *on your remote*. In this way, branches can also be shared, or many developers can work out of the same bare repository, each working on their own branch. Tidy. Clean.
 
+The Pull Request
+----------------
+
+So how does this all work for a software development workflow? There are a lot of answers to this question. We'll be using a fairly standard practice, which goes like this:
+
+1.  You decide you want to contribute to a project; you find it on github and clone it locally.
+2.  You use `git checkout -b <branch name>` to make a new branch (a "topic" or "feature" branch) to contain your work.
+3.  You work for a while, committing your work as you go. Every now and then, you use `git push`, to make sure your branch is available on the remote and that everything is up-to-date.
+4.  Every now and then, you make sure you're keeping up with `master` by merging it in like this:
+    1.  Make sure all of your work is committed on your branch.
+    2.  Check out the `master` branch and do a `git pull` to be sure it's up-to-date.
+    3.  If there are new commits on `master`, check out your topic branch and `git                     merge master`. Resolve any merge conflicts.
+5.  When you're ready to fully contribute your work, you do it like so:
+    1.  Make sure you're up to date with `master`, exactly like in step 4.
+    2.  `git push` your changes to the remote (github).
+    3.  Open the repo on github; create a new pull request.
+    4.  Share it around! Get code review.
+        1.  Make any changes suggested in code review.
+    5.  When you're ready, merge and delete your topic branch.
+
 Quintessential Git Operations:
 ------------------------------
 
@@ -389,29 +430,33 @@ Okay, let's build a git repo.
 
 ``` src
 cd /tmp
-mkdir -p demo-repo
-cd demo-repo
-pwd
+              mkdir -p demo-repo
+              cd demo-repo
+              pwd
+            
 ```
 
 ``` example
-/tmp/demo-repo
+            /tmp/demo-repo
+          
 ```
 
 We'll make a file – for ease of seeing line numbers, a grocery list:
 
 ``` src
 touch list.txt
-echo '1. Eggs' >> list.txt
-echo '2. Cheese' >> list.txt
-echo '3. Bacon' >> list.txt
-cat list.txt
+              echo '1. Eggs' >> list.txt
+              echo '2. Cheese' >> list.txt
+              echo '3. Bacon' >> list.txt
+              cat list.txt
+            
 ```
 
 ``` example
-1. Eggs
-2. Cheese
-3. Bacon
+            1. Eggs
+            2. Cheese
+            3. Bacon
+          
 ```
 
 Good so far.
@@ -422,24 +467,28 @@ First things first: we need to declare that this folder is a git repository. Thi
 
 ``` src
 git init
+              
 ```
 
 ``` example
-Initialized empty Git repository in /private/tmp/demo-repo/.git/
+              Initialized empty Git repository in /private/tmp/demo-repo/.git/
+            
 ```
 
 Perfect! Repo achieved. Notice that the `init` command has done exactly what it tells us it did – if we check the contents of our working directory:
 
 ``` src
 ls -la
+              
 ```
 
 ``` example
-total 8
-drwxr-xr-x   4 rossdonaldson  wheel  136 Feb 28 17:19 .
-drwxrwxrwt  18 root           wheel  612 Feb 28 17:19 ..
-drwxr-xr-x   9 rossdonaldson  wheel  306 Feb 28 17:19 .git
--rw-r--r--   1 rossdonaldson  wheel   27 Feb 28 17:19 list.txt
+              total 8
+              drwxr-xr-x   4 rossdonaldson  wheel   136 Feb  8 12:21 .
+              drwxrwxrwt  38 root           wheel  1292 Feb  8 12:21 ..
+              drwxr-xr-x   9 rossdonaldson  wheel   306 Feb  8 12:21 .git
+              -rw-r--r--   1 rossdonaldson  wheel    27 Feb  8 12:21 list.txt
+            
 ```
 
 Now there's a `.git`. Blam.
@@ -450,19 +499,21 @@ Git will tell us about a repo's present state using the `git status` command. Ri
 
 ``` src
 git status
+              
 ```
 
 ``` example
-On branch master
+              On branch master
 
-Initial commit
+              Initial commit
 
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
+              Untracked files:
+              (use "git add <file>..." to include in what will be committed)
 
-    list.txt
+              list.txt
 
-nothing added to commit but untracked files present (use "git add" to track)
+              nothing added to commit but untracked files present (use "git add" to track)
+            
 ```
 
 We learn which branch we're on (master), that the commit we're building will be the very first (i.e. the Initial commit), and that there's a single, un-tracked file. Not so exciting right now, but we'll be coming back to this command a **lot**.
@@ -475,37 +526,41 @@ So, before:
 
 ``` src
 git status
+              
 ```
 
 ``` example
-On branch master
+              On branch master
 
-Initial commit
+              Initial commit
 
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
+              Untracked files:
+              (use "git add <file>..." to include in what will be committed)
 
-    list.txt
+              list.txt
 
-nothing added to commit but untracked files present (use "git add" to track)
+              nothing added to commit but untracked files present (use "git add" to track)
+            
 ```
 
 And after:
 
 ``` src
 git add list.txt
-git status
+                git status
+              
 ```
 
 ``` example
-On branch master
+              On branch master
 
-Initial commit
+              Initial commit
 
-Changes to be committed:
-  (use "git rm --cached <file>..." to unstage)
+              Changes to be committed:
+              (use "git rm --cached <file>..." to unstage)
 
-        new file:   list.txt
+              new file:   list.txt
+            
 ```
 
 Okay! More informative! We've got a command on unstaging (look further through this doc for more on that), and list.txt is now known as a "new file"! Progress.
@@ -514,42 +569,46 @@ Now, an **important thing**: check out what happens if we now change the file:
 
 ``` src
 echo '4. kale' >> list.txt
-git status
+                git status
+              
 ```
 
 ``` example
-On branch master
+              On branch master
 
-Initial commit
+              Initial commit
 
-Changes to be committed:
-  (use "git rm --cached <file>..." to unstage)
+              Changes to be committed:
+              (use "git rm --cached <file>..." to unstage)
 
-    new file:   list.txt
+              new file:   list.txt
 
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+              Changes not staged for commit:
+              (use "git add <file>..." to update what will be committed)
+              (use "git checkout -- <file>..." to discard changes in working directory)
 
-    modified:   list.txt
+              modified:   list.txt
+            
 ```
 
 Note that our new change has *not* been added to the current commit. We'll go ahead and fix that now:
 
 ``` src
 git add list.txt
-git status
+                git status
+              
 ```
 
 ``` example
-On branch master
+              On branch master
 
-Initial commit
+              Initial commit
 
-Changes to be committed:
-  (use "git rm --cached <file>..." to unstage)
+              Changes to be committed:
+              (use "git rm --cached <file>..." to unstage)
 
-        new file:   list.txt
+              new file:   list.txt
+            
 ```
 
 ### `git commit`
@@ -558,12 +617,7 @@ Now that we've built our shiny new commit, let's go ahead and commit it:
 
 ``` src
 git commit -m "Initial commit of a grocery list"
-```
-
-``` example
-[master (root-commit) 5298dd9] Initial commit of a grocery list
- 1 file changed, 4 insertions(+)
- create mode 100644 list.txt
+              
 ```
 
 Let's break this down: `git commit` is our command – it's the most salient thing happening. That `-m` flag is worth unpacking.
@@ -578,11 +632,19 @@ Anywho:
 
 ``` src
 git status
+              
 ```
 
 ``` example
-On branch master
-nothing to commit, working directory clean
+              On branch master
+
+              Initial commit
+
+              Changes to be committed:
+              (use "git rm --cached <file>..." to unstage)
+
+              new file:   list.txt
+            
 ```
 
 Now we get a very terse message: working directory clean. Nothing to see here. Everything is committed. *Ahhhhh*.
@@ -593,22 +655,15 @@ Come with me on this one: let's say we want to be tidy grocery list developers a
 
 ``` src
 git branch
-```
-
-``` example
-* master
+              
 ```
 
 Okay, only the one so far. The asterisk indicates that `master` is our current branch. We can make a new branch like so:
 
 ``` src
 git branch list_dev
-git branch
-```
-
-``` example
-  list_dev
-* master
+                git branch
+              
 ```
 
 We've created a new branch… but we're still on master. To actually *use* our new branch, we need the next git command: `checkout`.
@@ -619,26 +674,30 @@ Git checkout is a) incredibly useful and b) painfully overloaded, meaning it doe
 
 ``` src
 git checkout list_dev
-git status
+                git status
+              
 ```
 
 ``` example
-On branch list_dev
-nothing to commit, working directory clean
+              On branch master
+
+              Initial commit
+
+              Changes to be committed:
+              (use "git rm --cached <file>..." to unstage)
+
+              new file:   list.txt
+            
 ```
 
 There! Now we're on branch `list_dev`: `git branch` confirms it:
 
 ``` src
 git branch
+              
 ```
 
-``` example
-* list_dev
-  master
-```
-
-There's an extra-awesome way to use `git checkout`: with the `-b` flag. `git checkout -b <branch_name>` does three good things at once:
+There's an extra-awesome way to use `git checkout`: with the `-b` flag. `git checkout                 -b <branch_name>` does three good things at once:
 
 1.  Creates a new branch named `<branch_name>`
 2.  Switches you to it
@@ -646,106 +705,124 @@ There's an extra-awesome way to use `git checkout`: with the `-b` flag. `git che
 
 ``` src
 echo "4. Orange Juice" >> list.txt
-git checkout -b even_list_devier
-git status
+                git checkout -b even_list_devier
+                git status
+              
 ```
 
 ``` example
-M       list.txt
-On branch even_list_devier
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+              On branch even_list_devier
 
-        modified:   list.txt
+              Initial commit
 
-no changes added to commit (use "git add" and/or "git commit -a")
+              Changes to be committed:
+              (use "git rm --cached <file>..." to unstage)
+
+              new file:   list.txt
+
+              Changes not staged for commit:
+              (use "git add <file>..." to update what will be committed)
+              (use "git checkout -- <file>..." to discard changes in working directory)
+
+              modified:   list.txt
+            
 ```
 
 Now, there's a **second crucially important** thing `git checkout` lets you do: recover deleted files or past states. So, for instance: I'm going to make a directory full of important files:
 
 ``` src
 mkdir -p so_important
-for i in 1 2 3; do touch so_important/critical_$i; done
-tree
+                for i in 1 2 3; do touch so_important/critical_$i; done
+                tree
+              
 ```
 
 ``` example
-.
-|-- list.txt
-`-- so_important
-    |-- critical_1
-    |-- critical_2
-    `-- critical_3
+              .
+              ├── list.txt
+              └── so_important
+              ├── critical_1
+              ├── critical_2
+              └── critical_3
 
-1 directory, 4 files
+              1 directory, 4 files
+            
 ```
 
 Git doesn't know about this yet, so let's add it:
 
 ``` src
 git add so_important
-git commit -am "This is so important. Add it!"
-```
-
-``` example
-[even_list_devier ebe7b4c] This is so important. Add it!
- 4 files changed, 1 insertion(+)
- create mode 100644 so_important/critical_1
- create mode 100644 so_important/critical_2
- create mode 100644 so_important/critical_3
+                git commit -am "This is so important. Add it!"
+              
 ```
 
 And now, let's do a poorly considered delete:
 
 ``` src
 rm -rf so_important
-ls -la
+                ls -la
+              
 ```
 
 ``` example
-total 8
-drwxr-xr-x   4 rossdonaldson  wheel  136 Feb 28 17:19 .
-drwxrwxrwt  18 root           wheel  612 Feb 28 17:19 ..
-drwxr-xr-x  12 rossdonaldson  wheel  408 Feb 28 17:19 .git
--rw-r--r--   1 rossdonaldson  wheel   51 Feb 28 17:19 list.txt
+              total 8
+              drwxr-xr-x   4 rossdonaldson  wheel   136 Feb  8 12:21 .
+              drwxrwxrwt  38 root           wheel  1292 Feb  8 12:21 ..
+              drwxr-xr-x  11 rossdonaldson  wheel   374 Feb  8 12:21 .git
+              -rw-r--r--   1 rossdonaldson  wheel    51 Feb  8 12:21 list.txt
+            
 ```
 
 Well crap. All our important stuff is completely gone. *Except*, we were smart developers and added it to git! Git knows something is up:
 
 ``` src
 git status
+              
 ```
 
 ``` example
-On branch even_list_devier
-Changes not staged for commit:
-  (use "git add/rm <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+              On branch even_list_devier
 
-    deleted:    so_important/critical_1
-    deleted:    so_important/critical_2
-    deleted:    so_important/critical_3
+              Initial commit
 
-no changes added to commit (use "git add" and/or "git commit -a")
+              Changes to be committed:
+              (use "git rm --cached <file>..." to unstage)
+
+              new file:   list.txt
+              new file:   so_important/critical_1
+              new file:   so_important/critical_2
+              new file:   so_important/critical_3
+
+              Changes not staged for commit:
+              (use "git add/rm <file>..." to update what will be committed)
+              (use "git checkout -- <file>..." to discard changes in working directory)
+
+              modified:   list.txt
+              deleted:    so_important/critical_1
+              deleted:    so_important/critical_2
+              deleted:    so_important/critical_3
+            
 ```
 
-It tells us we've deleted all those files. We can bring them back with `git checkout`:
+It tells us we've deleted all those files. We can bring them back with `git                 checkout`:
 
 ``` src
 git checkout -- so_important/*
-tree
+                tree
+              
 ```
 
 ``` example
-.
-|-- list.txt
-`-- so_important
-    |-- critical_1
-    |-- critical_2
-    `-- critical_3
+              .
+              ├── list.txt
+              └── so_important
+              ├── critical_1
+              ├── critical_2
+              └── critical_3
 
-1 directory, 4 files
+              1 directory, 4 files
+            
 ```
 
 Blam. Git saves the day.
@@ -756,29 +833,33 @@ Probably if we have changes, we wanna share them with the world, eh? I mean, may
 
 ``` src
 git push
+              
 ```
 
 ``` example
-fatal: No configured push destination.
-Either specify the URL from the command-line or configure a remote repository using
+              fatal: No configured push destination.
+              Either specify the URL from the command-line or configure a remote repository using
 
-    git remote add <name> <url>
+              git remote add <name> <url>
 
-and then push using the remote name
+              and then push using the remote name
 
-    git push <name>
+              git push <name>
+            
 ```
 
 To spare my github account, I'm going to create a bare repo locally:
 
 ``` src
 cd /tmp && git clone --bare demo-repo demo-remote
+              
 ```
 
 I can now add my remote to my original repo:
 
 ``` src
 git remote add origin /tmp/demo-remote
+              
 ```
 
 By convention, we call the "primary" remote of a repo "origin" (which makes considerably more sense if you think of cloning a repo from Github – Github is then your "origin".)
@@ -787,24 +868,28 @@ We can see that we have a remote set:
 
 ``` src
 git remote
+              
 ```
 
 ``` example
-origin
+              origin
+            
 ```
 
 Using git's verbose flag, `-v`, we can learn a little more about `origin`:
 
 ``` src
 git remote -v
+              
 ```
 
 ``` example
-origin  /tmp/demo-remote (fetch)
-origin  /tmp/demo-remote (push)
+              origin    /tmp/demo-remote (fetch)
+              origin    /tmp/demo-remote (push)
+            
 ```
 
-This means, by default, `git fetch` and `git push` will both refer to `git fetch origin` and `git push origin`. Perfect!
+This means, by default, `git fetch` and `git push` will both refer to `git fetch                 origin` and `git push origin`. Perfect!
 
 ### `git push`
 
@@ -816,43 +901,32 @@ First, when we push, we can manually specify a remote and a branch on the remote
 
 ``` src
 git push origin even_list_devier
+              
 ```
 
 This command gets a little tiresome, so we typically use the `--set-upstream` flag to tell git, "remember where I push so I don't have to type the full command in the future":
 
 ``` src
 git push --set-upstream origin even_list_devier
-```
-
-``` example
-Branch even_list_devier set up to track remote branch even_list_devier from origin.
+              
 ```
 
 Now that this has been saved, we can see our upstreams by passing the *double verbose* flag, `-vv`, to `git branch`:
 
 ``` src
 git branch -vv
-```
-
-``` example
-* even_list_devier ebe7b4c [origin/even_list_devier] This is so important. Add it!
-  list_dev         5298dd9 Initial commit of a grocery list
-  master           5298dd9 Initial commit of a grocery list
+              
 ```
 
 `[origin/even_list_devier]` means that `even_list_devier` is "tracking" an eponymous remote branch on `origin`. Yatta!
 
-Now, we can make that command a little shorter. Remember in the <span id="orgtarget1"></span> section, I set my "push strategy" to "simple"? This means that when I say `git push`, git automatically assumes that I mean `git push <upstream_branch>`.
+Now, we can make that command a little shorter. Remember in the <span id="orgeaa33f9"></span> section, I set my "push strategy" to "simple"? This means that when I say `git                 push`, git automatically assumes that I mean `git push <upstream_branch>`.
 
 ``` src
 echo "5. Gold Rings" >> list.txt
-git commit -am "Adding 5 Gold Rings to grocery list"
-git push
-```
-
-``` example
-[even_list_devier fa98a6c] Adding 5 Gold Rings to grocery list
- 1 file changed, 1 insertion(+)
+                git commit -am "Adding 5 Gold Rings to grocery list"
+                git push
+              
 ```
 
 Lovely.
@@ -863,120 +937,99 @@ Git gives us two ways to retrieve new commits from our remote: `fetch` and `pull
 
 ``` src
 cd /tmp && git clone ./demo-remote demo-second-clone
+              
 ```
 
 In demo-second-clone, I can use the `-av` syntax (all, verbose) to see what branches are on the remote:
 
 ``` src
 git branch -av
-```
-
-``` example
-* even_list_devier                fa98a6c Adding 5 Gold Rings to grocery list
-  remotes/origin/HEAD             -> origin/even_list_devier
-  remotes/origin/even_list_devier fa98a6c Adding 5 Gold Rings to grocery list
-  remotes/origin/list_dev         5298dd9 Initial commit of a grocery list
-  remotes/origin/master           5298dd9 Initial commit of a grocery list
+              
 ```
 
 Ah, of course. We never pushed `master` or `list_dev`, so they aren't on the remote at all. Let's fix that:
 
 ``` src
 cd /tmp/demo-repo
-git checkout list_dev
-git push --set-upstream origin list_dev
-git checkout master
-git push --set-upstream origin master
-```
-
-``` example
-Branch list_dev set up to track remote branch list_dev from origin.
-Branch master set up to track remote branch master from origin.
+                git checkout list_dev
+                git push --set-upstream origin list_dev
+                git checkout master
+                git push --set-upstream origin master
+              
 ```
 
 Now, back in demo-second-clone:
 
 ``` src
 git branch -avv
-```
-
-``` example
-* even_list_devier                fa98a6c [origin/even_list_devier] Adding 5 Gold Rings to grocery list
-  remotes/origin/HEAD             -> origin/even_list_devier
-  remotes/origin/even_list_devier fa98a6c Adding 5 Gold Rings to grocery list
-  remotes/origin/list_dev         5298dd9 Initial commit of a grocery list
-  remotes/origin/master           5298dd9 Initial commit of a grocery list
+              
 ```
 
 There. Now, let's see what `git status` in demo-second-clone has to say:
 
 ``` src
 git status
+              
 ```
 
 ``` example
-On branch even_list_devier
-Your branch is up-to-date with 'origin/even_list_devier'.
-nothing to commit, working directory clean
+              On branch master
+
+              Initial commit
+
+              nothing to commit (create/copy files and use "git add" to track)
+            
 ```
 
 It says we're up-to-date with `origin/even_list_devier` – but we know that's not true, because we pushed a commit from `demo-repo`. We can ask the remote to tell us about commits we're missing using `git fetch`:
 
 ``` src
 git fetch
-git status
+                git status
+              
 ```
 
 ``` example
-On branch even_list_devier
-Your branch is up-to-date with 'origin/even_list_devier'.
-nothing to commit, working directory clean
+              On branch master
+
+              Initial commit
+
+              nothing to commit (create/copy files and use "git add" to track)
+            
 ```
 
 Ah! There we go. We are "behind" by 1 commit, as expected. The thing to notice is that `git fetch` *has not changed anything*. We know what we're missing, but the current state of our files is no different:
 
 ``` src
 cat list.txt
-```
-
-``` example
-1. Eggs
-2. Cheese
-3. Bacon
-4. kale
-4. Orange Juice
-5. Gold Rings
+              
 ```
 
 `git pull` is the command that will actually bring changes from the remote *in to our working copy*:
 
 ``` src
 git pull
-```
-
-``` example
-Already up-to-date.
+              
 ```
 
 ``` src
 cat list.txt
-```
-
-``` example
-1. Eggs
-2. Cheese
-3. Bacon
-4. kale
-4. Orange Juice
-5. Gold Rings
+              
 ```
 
 Voila.
 
+Homework
+--------
+
+1.  Clone [blabs' config file](https://github.com/reed-college/blabs-config) to your computer. Read it and understand it.
+2.  Contribute a new command, or expand an old one!
+3.  Open a pull request. Heck! Open two!
+4.  When you open a pull request, post it in the interns channel; I'll review every single one of them. Y'all are welcome to review each others code – just remember to be kind. Ask questions! Learn things :D
+5.  Once I approve your PR, you can merge it, and I'll make blabs pick up the new configuration.
+
 Author: Ross Donaldson
 
-Created: 2016-02-28 Sun 17:19
+Created: 2017-02-08 Wed 12:21
 
 [Validate](http://validator.w3.org/check?uri=referer)
-
-

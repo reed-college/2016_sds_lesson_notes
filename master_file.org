@@ -444,6 +444,9 @@ sudo brew install git # <- DO NOT DO THIS
 5. Start thinking about users you care about! Who would you want to build for?
 
 * <2017-02-07 Tue> -- OMGWTFDVCS (Git, et al)
+:PROPERTIES:
+:EXPORT_FILE_NAME: lesson_02_git.html
+:END:
 
 ** Cleanup                                                        :noexport:
 #+BEGIN_SRC sh
@@ -920,6 +923,33 @@ The last thing to make sure we all know is that a branch in your local checkout
 can be configured to match a branch /on your remote/. In this way, branches can
 also be shared, or many developers can work out of the same bare repository,
 each working on their own branch. Tidy. Clean.
+
+** The Pull Request
+So how does this all work for a software development workflow? There are a lot
+of answers to this question. We'll be using a fairly standard practice, which
+goes like this:
+
+1. You decide you want to contribute to a project; you find it on github and
+   clone it locally.
+2. You use ~git checkout -b <branch name>~ to make a new branch (a "topic" or
+   "feature" branch) to contain your work.
+3. You work for a while, committing your work as you go. Every now and then, you
+   use ~git push~, to make sure your branch is available on the remote and that
+   everything is up-to-date.
+4. Every now and then, you make sure you're keeping up with ~master~ by merging it
+   in like this:
+   1. Make sure all of your work is committed on your branch.
+   2. Check out the ~master~ branch and do a ~git pull~ to be sure it's up-to-date.
+   3. If there are new commits on ~master~, check out your topic branch and ~git
+      merge master~. Resolve any merge conflicts.
+5. When you're ready to fully contribute your work, you do it like so:
+   1. Make sure you're up to date with ~master~, exactly like in step 4.
+   2. ~git push~ your changes to the remote (github).
+   3. Open the repo on github; create a new pull request.
+   4. Share it around! Get code review.
+      1. Make any changes suggested in code review.
+   5. When you're ready, merge and delete your topic branch.
+
 
 ** Quintessential Git Operations:
 :PROPERTIES:
@@ -1532,6 +1562,16 @@ cat list.txt
 : 6. is a good number
 
 Voila.
+
+** Homework
+1. Clone [[https://github.com/reed-college/blabs-config][blabs' config file]] to your computer. Read it and understand it.
+2. Contribute a new command, or expand an old one!
+3. Open a pull request. Heck! Open two!
+4. When you open a pull request, post it in the interns channel; I'll review
+   every single one of them. Y'all are welcome to review each others code --
+   just remember to be kind. Ask questions! Learn things :D
+5. Once I approve your PR, you can merge it, and I'll make blabs pick up the new
+   configuration.
 
 * <2017-02-14 Tue> -- Doing Computer: Starting to Pull this All Together
 
