@@ -1575,7 +1575,7 @@ Voila.
 
 * <2017-02-14 Tue> -- Doing Computer: Starting to Pull this All Together
 :PROPERTIES:
-:EXPORT_FILE_NAME: lesson_03_pulling_this_all_together.html
+:EXPORT_FILE_NAME: lesson_03_beginning_development.html
 :END:
 
 Okay: we know how to work a terminal. We know how to clone a git repo. Let's
@@ -1833,7 +1833,7 @@ lrwxr-xr-x  1 rossdonaldson  staff      29 Feb  3 10:55 gitk -> ../Cellar/git/2.
 #+end_example
 
 That's a lot of stuff with ~git~ in the name! And one of them is exactly what we
-were looking for: ~git~ itsown self.[fn:1]
+were looking for: ~git~ itsown self.
 
 The thing to understand about the ~PATH~ is that your shell searches it /in order/,
 looking for a program that matches what you've asked for.
