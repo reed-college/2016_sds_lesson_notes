@@ -1579,6 +1579,17 @@ Okay: we know how to work a terminal. We know how to clone a git repo. Let's
 start pulling the pieces together. We'll start with some software development
 tools, and their relationship with our computers.
 
+** But first: ~brew~
+These instructions assume you've installed python via brew. Here's a basic set
+of bash command call-and-responses you should be able to execute:
+
+#+BEGIN_SRC sh :exports code :eval never
+  which brew    # Should be something very much like /usr/local/bin/brew
+  which python  # Should be something like /usr/local/bin/python
+  which python3 # You'll never guess: /usr/local/bin/python3
+  which pip     # /usr/local/bin/pip (do you sense a pattern?)
+#+END_SRC
+
 ** Getting Going: ~virtualenvs~ and ~virtualenvwrapper~
 Let's get rocking with two of the very few python packages you always want
 installed globally: [[https://virtualenv.readthedocs.org/en/latest/][virtualenv]] and [[https://virtualenvwrapper.readthedocs.org/en/latest/][virtualenvwrapper]]. The installation is done
@@ -2163,6 +2174,12 @@ cat requirements.txt
 : wheel==0.29.0
 
 Perfect.
+
+** Homework
+Make sure brew, python2.7, python3, virtualenv, and virtualenvwrapper are all
+installed and work! You can test this with Slackbort. If you have time and
+interest, play around with Slackbort!
+
 * <2017-02-21 Tue> -- Text and SSH Keys
 
 ** First, a couple points
