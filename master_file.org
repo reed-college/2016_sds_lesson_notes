@@ -1833,7 +1833,7 @@ lrwxr-xr-x  1 rossdonaldson  staff      29 Feb  3 10:55 gitk -> ../Cellar/git/2.
 #+end_example
 
 That's a lot of stuff with ~git~ in the name! And one of them is exactly what we
-were looking for: ~git~ itsown self.
+were looking for: ~git~ itsown self[fn:1].
 
 The thing to understand about the ~PATH~ is that your shell searches it /in order/,
 looking for a program that matches what you've asked for.
@@ -2208,8 +2208,12 @@ installed and work! You can test this with Slackbort. If you have time and
 interest, play around with Slackbort!
 
 * <2017-02-21 Tue> -- Text and SSH Keys
+:PROPERTIES:
+:EXPORT_FILE_NAME: lesson_04_ssh_plain_text.markdown
+:END:
 
 ** First, a couple points
+
 *** Text versus Everything Else
 Let's look at bits of two different files:
 
@@ -2274,8 +2278,8 @@ pretty much always /just text/. So are all the configuration files that control
 your laptop. So are all the configuration files that control every Linux and
 Unix computer in the world.
 
-*** SSH Keys
-**** What the Crap is SSH?
+** SSH Keys
+*** What the Crap is SSH?
 SSH -- short for Secure Shell, is a protocol by which two computers can
 exchange information. Sometimes, we connect to another computer "over" SSH,
 allowing us to use that computer through the terminal on our own "local"
@@ -2320,7 +2324,7 @@ you."
 Here at Reed, we'll use SSH keys for Github access, as well as for access to
 virtual machines in the Reed stack, if you ever need such a thing.
 
-**** Makin' SSH Keys
+*** Makin' SSH Keys
 
 So how do we do this? Great question! Good news: it's easy. Open yer terminal
 and execute like so:
@@ -2343,7 +2347,7 @@ password. This is vastly more secure; it's also optional.
 
 Next... you're done! Good job.
 
-**** What to do with your SSH Keys
+*** What to do with your SSH Keys
 Here's a great one: go to github.com and log in. In the upper-right-hand corner
 of the screen is a tiny little representation of your avatar; click the arrow
 next to that, then hit /Settings/. There's a dialogue on the left side of the
@@ -2377,7 +2381,7 @@ desktop, so security can be managed on them separately. For instance: if my work
 laptop is stolen, we can revoke only its keys and I can generate new ones,
 leaving my desktop untouched.
 
-**** Using SSH with git: a brief lesson in URIs
+*** Using SSH with git: a brief lesson in URIs
 
 If you go to [[https://github.com/Gastove/slackbort][the Slackbort repo on Github]], you'll see at the top there's a box
 with either "HTTPS" or "SSH" in it, followed by some text -- either
