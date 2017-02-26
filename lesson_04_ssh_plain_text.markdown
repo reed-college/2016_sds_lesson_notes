@@ -130,6 +130,31 @@ In practice, the `scheme` is often omitted, provided by context. For instance: w
 
 So: a URI that begins with `git@github.com` is telling git to try and access the `github.com` domain with user `git`; it then looks for a repo, which traditionally has the form `<username or organization>/<repo name>.git`. This is, it should be noted, just the way Github is set up; git URIs very often have a form more like, for instance, those at my work: `ssh://git@atlassian.prod.urbanairship.com:222/reports/hubble.git`.
 
+
+# Homework
+
+1.  Make sure your dev env is set up! Can you do *everything* from the last two homeworks? I hope so!
+2.  Write me an email answering these questions:
+    1.  Will you be in Portland over Spring Break?
+    2.  If so, would you like to work?
+    3.  If so, would you enjoy having one or two SDS workshops of 2-5 hours in length?
+3.  Start customizing your terminal. You can bill me for as many customizations as you feel like making, but at minimum do the following:
+    1.  Make a dir in your home directory called `bin`. Add it to your `$PATH`. Verify it works by doing the following:
+        1.  Make a file in `bin` called `boop`.
+        2.  Put these two lines in the file:
+
+            ```sh
+            #!/usr/bin/env bash
+            echo 'boop!'
+            ```
+
+                boop!
+
+        3.  In the terminal, in your home dir, run the command, `chmod a+x bin/boop` (this tells your terminal that `boop` is an executable).
+        4.  Type `boop` in your terminal. If you see a `boop!`, you win!
+    2.  Alter your prompt to show the full path of your current working directory. Yes, there are websites that will generate super fancy prompts for you. You can do this if you want, but 1) bill me honestly, and 2) it defeats the point of the exercise if you don't understand what you're doing. If you have a website make you a fancy prompt, spend a few hours picking it apart! Research what it's doing. Learning about the dang thing so you can poke it yourself.
+    3.  Turn on colorization for the output of `ls` if it isn't already.
+
 ## Footnotes
 
 <sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> But please: don't.
