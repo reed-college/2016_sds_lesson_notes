@@ -2441,6 +2441,9 @@ like, for instance, those at my work:
    3. Turn on colorization for the output of ~ls~ if it isn't already.
 
 * <2017-02-28 Tue> -- Web Applications: What do?
+:PROPERTIES:
+:EXPORT_FILE_NAME: lesson_05_web_applications.md
+:END:
 
 #+name: postproc-rm-ctrlm
 #+BEGIN_SRC python :var to_clean='default' :results output :exports results
@@ -2483,7 +2486,7 @@ text -- for instance, returned from ~cat~ -- and make a change to each line,
 frequently using this syntax:
 
 #+BEGIN_EXAMPLE
-sed -e "s/value to find/value to replace it with/"
+sed -e "s/value to find/value to replace it with/g"
 #+END_EXAMPLE
 
 For instance, imagine we have a text file like:
@@ -2531,7 +2534,7 @@ said about how it developed. HTTP is an amazing study in how the /specification/
 of a piece of technology and the implementation of it might entirely diverge
 once the world at large is involved. For instance: HTTP 1.1 was specified in
 [[https://tools.ietf.org/html/rfc2068][1997]], was obsolete by [[https://tools.ietf.org/html/rfc2616][1999]], and is still the most common version of the protocol
-in use today. In 2016. Just... let that sink in. The format of HTTP messages was
+in use today. In 2017. Just... let that sink in. The format of HTTP messages was
 defined in 1982. The specifying [[https://tools.ietf.org/html/rfc822][RFC]] is still titled, /Standard for the Format of
 ARPA Internet Text Messages/.
 
@@ -2548,6 +2551,7 @@ curl -i http://www.google.com
 
 #+RESULTS:
 #+begin_example
+
 HTTP/1.1 200 OK
 Date: Mon, 04 Apr 2016 03:44:32 GMT
 Expires: -1
@@ -2625,7 +2629,7 @@ request? For instance, if have a correctly implemented Slack bot with a valid
 token and you try to open a direct message channel with a non-existent user,
 Slack will return something like:
 
-#+BEGIN_EXAMPLE
+#+BEGIN_EXAMPLE js
 HTTP/1.1 200 OK
 
 {
@@ -2770,7 +2774,7 @@ or DNS. Here's a gross oversimplification of how this works:
 - DNS Server: I'm not sure, but I know a DNS Server who does. Talk to Google's
      DNS Server -- have an IP address.
 - Computer : Hokay. Hey Google's DNS Server. What the hell is www.google.com?
-- Google's DNS Server : Oh, it's this -- have an IP Addres.
+- Google's DNS Server : Oh, it's this -- have an IP Address.
 
 So: DNS is a hierarchical system by which a computer can talk to a general
 lookup service and reach more specific lookup services until it can talk to a
@@ -2942,6 +2946,16 @@ of this site!", and the Server responds with a JSON blob describing all of them,
 which the JS then turns in to HTML.
 
 As you might apprehend, this can get complex in a hurry.
+
+*** Homework
+Okay, it's time to start tinkering!
+
+1. Install the `http-demo` app and run it locally.
+2. Read over the source code.
+3. Start reading about [[http://jinja.pocoo.org/docs/2.9/][jinja2]]
+4. Start changing things! See if they break, and how.
+5. See if you can add a few new routes! What about a new template?
+6. For the bold, try adding basic CSS!
 
 * <2017-03-07 Tue> -- Welcome to Databases
 Okay, this is a topic I love. Databases! Just say it with me. /Databases/. So
