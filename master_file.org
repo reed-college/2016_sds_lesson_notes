@@ -2958,6 +2958,10 @@ Okay, it's time to start tinkering!
 6. For the bold, try adding basic CSS!
 
 * <2017-03-07 Tue> -- Welcome to Databases
+:PROPERTIES:
+:EXPORT_FILE_NAME: lesson_06_databases_part_one.md
+:END:
+
 Okay, this is a topic I love. Databases! Just say it with me. /Databases/. So
 good. Day-tuh-bace. /Yes/.
 
@@ -3057,6 +3061,9 @@ Notable key-value stores:
 - Redis
 - MongoDB
 - Couchbase
+
+*** Remember, kids:
+If it doesn't persist to disk, /it's not a database/. Redis? Not a database.
 
 ** Let's Refactor some Information
 Let's imagine we're working with the purchase record of a small business. It's
@@ -3456,13 +3463,13 @@ uniqueness. Second, I'm going to add an ~item_description~ field. Like so:
 Given this, let's start with a prose description of this data:
 
 #+BEGIN_QUOTE
-Ever item is required to have a name and inventory number -- there's no sensible
-default value for either. The inventory number should be unique, but the item
-name doesn't have to be. The id of an item should be the next higher id after
-the last id added. If no number of units in stock is provided, default to zero;
-do not let this be negative. If no price is specified, default to zero dollars
-and zero cents; do not allow this to be negative. Item description can be
-omitted entirely. Updated on should always be the timestamp of the last time
+Every item is required to have a name and inventory number -- there's no
+sensible default value for either. The inventory number should be unique, but
+the item name doesn't have to be. The id of an item should be the next higher id
+after the last id added. If no number of units in stock is provided, default to
+zero; do not let this be negative. If no price is specified, default to zero
+dollars and zero cents; do not allow this to be negative. Item description can
+be omitted entirely. Updated on should always be the timestamp of the last time
 this row was modified. Because we're sure id will always be unique, it will be
 our primary key.
 #+END_QUOTE
@@ -3591,6 +3598,10 @@ column to a specified set of values.
 |-------------------------+----------------------------------------------------------+----------+------------+-----------+----------------+-------+---------+------------------+------------+------------+-----------------------------------------------|
 
 * <2017-03-21 Tue> -- Database, Part Two: the Sequel
+:PROPERTIES:
+:EXPORT_FILE_NAME: lesson_07_databases_part_two.md
+:END:
+
 #+BEGIN_SRC sh :exports none
 dropdb db_lesson_sql
 dropdb db_lesson_orm
