@@ -106,3 +106,8 @@ true
 > !true
 false
 ```
+
+## Real World Javascript
+
+All of this command line stuff is nice and all, but most likely you want to write Javascript be run in the browser. So how is that done? In this repo in the `examples/lesson_0X` folder there is a file called `index.html`. If you run it, you should get something like this: 
+
