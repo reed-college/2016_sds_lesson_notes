@@ -63,6 +63,9 @@ There are six primitives in Javascript
  4. Null
  5. Undefined
  6. Symbol
+ 
+ 
+
 Note the 'Number' type. Unlike Python, which has a several different types for numbers, Javascript has just one. The 'Number' type is the same as the 'float' type in Python. Observe this Javascript command:
 ```
 > 5+5
