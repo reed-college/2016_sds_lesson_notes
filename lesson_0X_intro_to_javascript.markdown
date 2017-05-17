@@ -95,3 +95,14 @@ Javascript will also automatically convert booleans and numbers to string. Obser
 > typeof (.1 + .2)
 'number'
 ```
+As you can see, booleans and strings are similar to python except that booleans are lowercase. A more notable difference is with the boolean operators: `and`, `or`, and `not`. These words are replaced in Javascript by `&&`, `||`, and `!`.
+```
+> true && true
+true
+> true && false
+false
+> true || false
+true
+> !true
+false
+```
