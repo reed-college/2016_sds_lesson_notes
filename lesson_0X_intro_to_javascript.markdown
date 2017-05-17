@@ -82,3 +82,16 @@ And compare it to this python interaction:
 10.0
 ```
 In javascript, `5+5` and `5.0+5.0` both return the same thing since both are floating point numbers. In Python, `5+5` and `5.0+5.0` return different things because python wants to differentiate between floating point numbers and integers.
+
+
+Javascript will also automaticcally convert booleans and numbers to string. Observere:
+```
+> true + "Hello"
+'trueHello'
+> 1 + "2"
+'12'
+> typeof .1 + .2
+'number0.2'
+> typeof (.1 + .2)
+'number'
+```
