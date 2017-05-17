@@ -53,3 +53,8 @@ undefined
 grantal@computername:~$
 ```
 Since we didn't assign a value to `x` is is 'undefined.' So the `console.log` function returns an undefined variable. Also `console.log` does not just work in the command line. If you press `F12` in most browsers and click on `console` is will bring up a console. Shocking. This is where `console.log` commands run in a javascript file in the web page will output. 
+
+## Types
+
+There are six primitives in Javascript
+
