@@ -57,4 +57,25 @@ Since we didn't assign a value to `x` is is 'undefined.' So the `console.log` fu
 ## Types
 
 There are six primitives in Javascript
-
+ 1. Number
+ 2. Boolean
+ 3. String
+ 4. Null
+ 5. Undefined
+ 6. Symbol
+Note the 'Number' type. Unlike Python, which has a several different types for numbers, Javascript has just one. The 'Number' type is the same as the 'float' type in Python. Observe this Javascript command:
+```
+> 5+5
+10
+> 5.0+5.0
+10
+>
+```
+And compare it to this python interaction:
+```
+>>> 5+5
+10
+>>> 5.0+5.0
+10.0
+```
+In javascript, `5+5` and `5.0+5.0` both return the same thing since both are floating point numbers. In Python, `5+5` and `5.0+5.0` return different things because python wants to differentiate between floating point numbers and integers.
