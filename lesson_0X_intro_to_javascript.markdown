@@ -84,7 +84,7 @@ And compare it to this python interaction:
 In javascript, `5+5` and `5.0+5.0` both return the same thing since both are floating point numbers. In Python, `5+5` and `5.0+5.0` return different things because python wants to differentiate between floating point numbers and integers.
 
 
-Javascript will also automaticcally convert booleans and numbers to string. Observere:
+Javascript will also automatically convert booleans and numbers to string. Observe:
 ```
 > true + "Hello"
 'trueHello'
