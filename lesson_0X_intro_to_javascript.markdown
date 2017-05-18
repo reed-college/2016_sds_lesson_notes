@@ -111,3 +111,17 @@ false
 
 All of this command line stuff is nice and all, but most likely you want to write Javascript be run in the browser. So how is that done? In this repo in the `examples/lesson_0X` folder there is a file called `index.html`. If you run it, you should get something like this: 
 
+![alert](/images/alert.PNG)
+
+So what's going on? Lets take a look at the two files in the `examples/lesson_0X` folder:
+```html
+<!-- index.html -->
+<head>
+    <script src="alert.js"></script> 
+</head>
+```
+```javascript
+// alert.js
+alert("hello there!");
+```
+So the html file imports the javascript between the two `head` tags. Then, the browser runs the javascript file and executes the first line of code it sees. As you can see, the `alert` function will bring up a popup window on the webpage. Also single line comments in javascript begin with a `//` rather than a `#` like in python.
