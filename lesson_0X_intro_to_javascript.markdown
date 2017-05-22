@@ -125,3 +125,7 @@ So what's going on? Lets take a look at the two files in the `examples/lesson_0X
 alert("hello there!");
 ```
 So the html file imports the javascript between the two `head` tags. Then, the browser runs the javascript file and executes the first line of code it sees. As you can see, the `alert` function will bring up a popup window on the webpage. Also single line comments in javascript begin with a `//` rather than a `#` like in python.
+
+## Semicolons
+
+In `alert.js` I put a semicolon at the end of the line. That was not necessary, the code would run the same without the semicolon. You do need a semicolon if you want to execute two 
