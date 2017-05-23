@@ -126,6 +126,35 @@ alert("hello there!");
 ```
 So the html file imports the javascript between the two `head` tags. Then, the browser runs the javascript file and executes the first line of code it sees. As you can see, the `alert` function will bring up a popup window on the webpage. Also single line comments in javascript begin with a `//` rather than a `#` like in python.
 
-## Semicolons
+## A Note About Semicolons
 
-In `alert.js` I put a semicolon at the end of the line. That was not necessary, the code would run the same without the semicolon. You do need a semicolon if you want to execute two 
+In programming languages other than python, you end each statement with a semicolon rather than a line end. In javascript you can use both to end a statement. In `alert.js` I put a semicolon at the end of the line. That was not necessary, the code would run the same without the semicolon. You do need a semicolon if you want to execute two statements in the same line. For example:
+```
+> var x = 5; x
+5
+>
+```
+
+## If Else blocks
+
+The `If Else` syntax in javascript is pretty similar to python. Here's an example:
+
+```
+> if (5 < 4) {
+... console.log(1)
+... } else if (3 < 2) {
+... console.log(2)
+... } else {
+... console.log(3)
+... }
+3
+undefined
+>
+```
+Its pretty similar to python, only three major differences:
+1. Each condition needs to be surrounded by parentheses
+2. each block needs to be surrounded by curly braces
+3. use `else if` rather than `elif`.
+
+
+
