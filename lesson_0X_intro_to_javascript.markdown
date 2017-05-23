@@ -151,10 +151,51 @@ The `If Else` syntax in javascript is pretty similar to python. Here's an exampl
 undefined
 >
 ```
-Its pretty similar to python, only three major differences:
+Its pretty similar to python, there are three major differences:
 1. Each condition needs to be surrounded by parentheses
 2. each block needs to be surrounded by curly braces
 3. use `else if` rather than `elif`.
 
+## Loops
 
-
+The `while` loop difference between python and javascript are the same as 1 & 2 from the if else blocks part. Here's an example:
+```
+> var x = 0
+undefined
+> while (x < 5){
+... console.log(6)
+... x = x + 1
+... }
+6
+6
+6
+6
+6
+5
+>
+```
+`for` loops are where weird stuff happens. I'll start by recreating the while loop from above:
+```
+> for (var x = 0; x < 5; x = x + 1){
+... console.log(6)
+... }
+6
+6
+6
+6
+6
+undefined
+>
+```
+So inside the parentheses of the for loop there are three statements:
+1. `var x = 0` This is called the *initialization*. This gets run before the loop starts
+2. `x < 5` This is called the *condition*. It functions the same as the `x < 5` in the while loop.
+3. `x = x + 1` This is called the *afterthought*. This gets run at the end of each loop.
+You can also do stuff like this:
+```
+> for(;;){
+... }
+^CError: Script execution interrupted.
+>
+```
+If you omit the three statements, the loop will run forever. This is called a *forever loop*. It functions identically to a `while (true)` loop. 
