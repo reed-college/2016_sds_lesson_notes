@@ -199,3 +199,11 @@ You can also do stuff like this:
 >
 ```
 If you omit the three statements, the loop will run forever. This is called a *forever loop*. It functions identically to a `while (true)` loop. 
+
+## jquery
+
+To begin this section, here is a typical javascript stackoverflow question:
+
+![jquery](http://i.imgur.com/Q3mkcnl.gif?1=)
+
+I put this in to hightlight that jquery is never *necessary*. Anything you can do with jquery you can do with standard javascript and html. jquery just makes some problems easier to solve. Now, I will make an example that uses standard javascript and convert it to jquery. 
