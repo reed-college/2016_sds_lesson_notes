@@ -207,3 +207,28 @@ To begin this section, here is a typical javascript stackoverflow question:
 ![jquery](http://i.imgur.com/Q3mkcnl.gif?1=)
 
 I put this in to hightlight that jquery is never *necessary*. Anything you can do with jquery you can do with standard javascript and html. jquery just makes some problems easier to solve. Now, I will make an example that uses standard javascript and convert it to jquery. 
+
+
+So, If I open `ex2.html`, this is what I see:
+
+![ex2](/images/ex2.PNG)
+
+Now, If I turn off javascript on the page, I see this:
+
+![ex2](/images/ex2-1.PNG)
+
+So, the javascript for the page is manipulating the page's html in some way. Let's take a look at the source code.
+```HTML
+<!-- ex2.html -->
+<!doctype html>
+<head>
+    <meta charset="UTF-8"> 
+</head>
+<body>
+    <p>The thing</p>
+    <script>
+        var paragraph = document.getElementsByTagName("p")[0];
+        paragraph.innerHTML = "The other thing";
+    </script>
+</body>
+```
