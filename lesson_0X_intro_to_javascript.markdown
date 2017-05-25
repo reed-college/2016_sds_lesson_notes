@@ -227,8 +227,8 @@ So, the javascript for the page is manipulating the page's html in some way. Let
 <body>
     <p>The thing</p>
     <script>
-        var paragraph = document.getElementsByTagName("p")[0];
-        paragraph.innerHTML = "The other thing";
+        var paragraph = document.getElementsByTagName("p")[0]
+        paragraph.innerHTML = "The other thing"
     </script>
 </body>
 ```
