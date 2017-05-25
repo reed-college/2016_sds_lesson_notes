@@ -232,3 +232,4 @@ So, the javascript for the page is manipulating the page's html in some way. Let
     </script>
 </body>
 ```
+So, this file selects the `<p>The thing</p>` element using `getElementsByTagName` with the tag name of `p`. That function returns a list, so we get the first item of that list set the variable `paragraph` to that element. We then set the html of the stuff between the `<p>` and `</p>` to `"The other thing"` and thats it.
