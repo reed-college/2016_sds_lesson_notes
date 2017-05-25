@@ -109,11 +109,11 @@ false
 
 ## Real World Javascript
 
-All of this command line stuff is nice and all, but most likely you want to write Javascript be run in the browser. So how is that done? In this repo in the `examples/lesson_0X` folder there is a file called `index.html`. If you run it, you should get something like this: 
+All of this command line stuff is nice and all, but most likely you want to write Javascript be run in the browser. So how is that done? In this repo in the `examples/lesson_08/example01` folder there is a file called `index.html`. If you run it, you should get something like this: 
 
 ![alert](/images/alert.PNG)
 
-So what's going on? Lets take a look at the two files in the `examples/lesson_0X` folder:
+So what's going on? Lets take a look at the two files in the `examples/lesson_08/example01` folder:
 ```html
 <!-- index.html -->
 <head>
