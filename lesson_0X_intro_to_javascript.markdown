@@ -232,4 +232,24 @@ So, the javascript for the page is manipulating the page's html in some way. Let
     </script>
 </body>
 ```
-So, this file selects the `<p>The thing</p>` element using `getElementsByTagName` with the tag name of `p`. That function returns a list, so we get the first item of that list set the variable `paragraph` to that element. We then set the html of the stuff between the `<p>` and `</p>` to `"The other thing"` and thats it.
+So, this file selects the `<p>The thing</p>` element using `getElementsByTagName` with the tag name of `p`. That function returns a list, so we get the first item of that list set the variable `paragraph` to that element. We then set the html of the stuff between the `<p>` and `</p>` to `"The other thing"`. Also, our script needs to in the html file *after* the `<p>` element, otherwise our script would run and it could not find a `<p>` element to act on.
+
+
+If you open `ex3.html` in your browser, you will see the exact same stuff as with `ex2.html`, so I won't post screenshots, lets go straight into the source code.
+```HTML
+<!-- ex3.html -->
+<!doctype html>
+<head>
+    <meta charset="UTF-8"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("p").html("The other thing")
+        })
+    </script>
+</head>
+<body>
+    <p>The thing</p>
+</body>
+```
+Okay, first main difference is the part where it says `<script src=...`. This line gets imports jquery from a website that google maintains so that our script can use jquery. Now we can talk about importing. You can't import a javascript file from another javascript file. You have to import them all in you html file. Also, the order matters: If we put the jquery `script` tag after our script, then our script would throw an error. Okay, lets move on to our script. You may notice that our script is in the head and not the body this time. This is because we wrapped our program in the `$(document).ready` function. This makes it so that the script waits until all the elements on the page have loaded before running the `function()`. Now we get to get into anaonymous functions! These are just functions that
