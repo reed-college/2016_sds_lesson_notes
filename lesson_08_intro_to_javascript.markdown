@@ -106,6 +106,10 @@ true
 > !true
 false
 ```
+`null` is similar to `undefined`. It also means the absence of a value for a variable, but a variable has to be set as `null` by the script. `None` in python does all of the things that both `null` and `undefined`. 
+
+I covered `undefined` in the last section and I've never needed to use `Symbol` before, so we'll skip it.
+
 
 ## Real World Javascript
 
