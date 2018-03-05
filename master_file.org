@@ -3918,7 +3918,7 @@ And some foods:
   INSERT INTO food (name, kind, description)
   VALUES ('carrot', 'vegetable', 'how much beta carotene can be in one food IT IS SO MUCH')
          , ('celery', 'vegetable', 'eating crunchy vegetables is good for me')
-         , ('quinoia', NULL, 'are we actually sure what this is?')
+         , ('quinoa', NULL, 'are we actually sure what this is?')
          , ('roast beef', 'meat', NULL)
          , ('tuna sandwich', 'sandwich', 'made with apples and sourdough bread')
   ;
@@ -3975,9 +3975,9 @@ Structured Query Language -- so let's write some queries!
 
 A SQL query has this basic form:
 #+BEGIN_SRC sql :eval never :exports code
-SELECT column_name_one, column_name_two
-FROM table_name
-(optionally) WHERE condition = value;
+  SELECT column_name_one, column_name_two
+  FROM table_name
+  (optionally) WHERE condition = value;
 #+END_SRC
 
 Each part of a SQL query is called a /clause/ -- for instance, the ~SELECT~ clause
